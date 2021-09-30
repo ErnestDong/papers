@@ -1,0 +1,309 @@
+% Created 2021-09-26 Sun 18:17
+% Intended LaTeX compiler: xelatex
+\documentclass[presentation]{beamer}
+\usepackage{xeCJK}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usetheme{CambridgeUS}
+\author{陈晓宇~董晨阳~赵辰}
+\date{\today}
+\title{风险偏好与行为决策}
+\subtitle{基于行为经济学视角}
+\institute{Peking University}
+\hypersetup{
+ pdfauthor={陈晓宇~董晨阳~赵辰},
+ pdftitle={风险偏好与行为决策},
+ pdfkeywords={},
+ pdfsubject={},
+ pdflang={English}}
+\setbeamertemplate{bibliography item}{}
+\setbeamertemplate{bibliography entry article}{}
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+\begin{document}
+
+\AtBeginSection[]
+{
+	\begin{frame}{目录}
+		\tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]
+	\end{frame}
+}
+\maketitle
+\begin{frame}{目录}
+	\tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{行为经济学简介}
+\label{dcy}
+\subsection{行为经济学的兴起}
+
+\begin{frame}{传统经济学理论的困境}
+	主流经济学是一个相当抽象的演绎体系，它最基本的假设是理性假设和自利假设，即，所有人都是追求利润最大化或效用最大化的“经济人”。通过复杂的假设与推导，经济学家得到了许多复杂的结论，例如如下公式
+	：
+
+	$$
+		y(\tau)=\beta_1+\beta_2[\frac{1-e^{-\tau/\lambda}}{\tau/\lambda}] +\sum_{i=3,4}\beta_i[\frac{1-e^{-\tau/\lambda_i}}{\tau/\lambda_i}-e^{-\tau/\lambda_i}]
+	$$
+
+	但是，在真实世界中，这样复杂的公式不一定能拟合得很好。
+\end{frame}
+\begin{frame}{行为经济学的补充}
+	\begin{minipage}{0.2\linewidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{./lib/Richard_H._Thaler_EM1B8783_(38891871821).jpg}
+			\caption{Richard H Thaler}
+			\label{fig:Richard_H._Thaler}
+		\end{figure}
+	\end{minipage}
+	\begin{minipage}{0.75\linewidth}
+		人类行为决策的是极其复杂的，而且系统性地偏离了传统经济学假设所预测的人类行为。现实中的个人的理性能力往往是有限的，他们经常依靠直觉来解决问题，而且老是会犯错误。
+
+		同时，人们还会通过合作来实现共赢，甚至愿意牺牲自己的利益来促进他人的利益。
+
+		因此有经济学家强调，必须从对真实世界的观察出发，解释这种系统性的偏离出现的原因。这也是行为经济学之滥觞。
+	\end{minipage}
+\end{frame}
+\begin{frame}{比较}
+	\begin{center}
+		\begin{tabular}{lll}
+			         & 传统经济学                     & 行为经济学           \\
+			\hline
+			理论假设 & 完全理性                       & 有限理性             \\
+			         & 稳定的内在一致的偏好           & 灵活偏好             \\
+			         & 完全自私                       & 有限自私             \\
+			         & 关注绝对结果                   & 关注相对变化         \\
+			         & 卓越的自制力                   & 自我约束问题         \\
+			\hline
+			理论模式 & 规范型                         & 描述型               \\
+			\hline
+			研究主题 & 人类社会各种经济活动与经济关系 & 人及其行为           \\
+			\hline
+			研究方法 & 逻辑推理与数学定量分析         & 观察、调查、行为实验 \\
+		\end{tabular}
+	\end{center}
+\end{frame}
+\subsection{心理学背景}
+\begin{frame}[fragile]{思考的快与慢}
+	\begin{verbatim}
+    1+1=？
+
+    100 + 300 * 600 - 400 =?
+    \end{verbatim}
+	你买手机的时候，人经常会凭直觉认为，这个手机不错！ 当你有生命危险的时候，你的 快系统 就会告诉你，快跑，有生命危险！！
+
+	你买手机的时候，人经常会凭直觉(快系统)认为，这个手机不错！但是后续 慢系统 就会出现各种各样的想法； 当你有生命危险的时候，你的 快系统 就会告诉你，快跑，有生命危险！！但是接下来慢系统就会理性的分析应对策略
+\end{frame}
+\begin{frame}{快系统与慢系统}
+	\begin{center}
+		\includegraphics[width=.9\linewidth]{./lib/Think, fast and slow.drawio.png}
+	\end{center}
+	系统 1 是 无意识的，由此产生的 认知偏差(心理学:人类在不确定情境下的决策通常面临着出现差错的风险) 才难以自我察觉。 加上 系统 2 需要极强的 自我控制 和 精力损耗，我们会偏向更轻松的 惰性思维 直接即做出 即兴判断。 也就是说，大部分情况下，人做出的决策是非理性的，做出的决策会存在偏误。
+\end{frame}
+\subsection{基石理论}
+\begin{frame}{前景理论 Prospect Theory\&心理账户 mental accounting}
+	见老师课件与 ppt 第\ref{cxy}部分
+\end{frame}
+\begin{frame}[fragile]{启发式认知偏差 Heuristic Bias}
+	指人们往往依据“经验法则”来进行决策，依赖“启发法”做出的决策带有不确定性，只能说可能是正确的结论，但如果所遗漏的因素和现象很重要，那么信息的缺损就会导致产生判断与估计上的严重偏差。
+	\begin{block}{代表性偏差}
+		人们在不确定性的情形下，会捉住问题的某个特征直接推断出结果，而不考虑这种特征出现的真实概率以及与特征有关的其它原因
+		\begin{verbatim}
+    山西人==家里有矿？
+
+    山西人==白毛巾裹头&红腰带？
+    \end{verbatim}
+	\end{block}
+	\begin{block}{可得性偏差}
+		人们会依据记忆中易于使用的信息做出各种判断决策；也就是说，信息越容易被记住，就更倾向于被作为判断，决策的依据；
+		\begin{verbatim}
+    飞机是最危险的交通工具么？
+    \end{verbatim}
+	\end{block}
+\end{frame}
+\begin{frame}[fragile]{启发式认知偏差 Heuristic Bias}
+	\begin{block}{小数法则(小数定律)}
+		人们对已发生的小样本事件进行错误的估计，这就导致很多人迷恋小概率，做出决策偏误
+		\begin{verbatim}
+    这么久没抽到 SSR 下一张应该会是？
+    \end{verbatim}
+	\end{block}
+
+	\begin{block}{锚定效应}
+		当我们需要对某个事件或者人进行评估时，往往会以某些特定数值作为初始参照值.
+		\begin{verbatim}
+    让两组人分别估计 7x6x5x4x3x2x1 的结果，和
+    1x2x3x4x5x6x7 的结果是多少？
+    \end{verbatim}
+	\end{block}
+\end{frame}
+
+
+% \begin{frame}[fragile]{心理账户 mental accounting}
+%     %  \begin{verbatim}
+%     % 如果今天晚上你打算去听一场音乐会，票价是 200 元。
+
+%     % 在你马上要出发的时候，你发现你把最近买的价值 200 元的
+%     % 电话卡弄丢了。你是否还会去听这场音乐会？
+
+%     % 在你马上要出发的时候，突然发现你把门票弄丢了。如果你
+%     % 想要听音乐会，就必须再花 200 元钱买张门票呢？
+%     % \end{verbatim}
+%     % 心理账户的核心理论是经济人进行决策时并非完全理性，并非依据纯粹的收益和损失进行决策，而是将其划分为一个个独立的心理账户，基于不同的独立心理账户进行决策，而且这些心理账户之间存在不同的期望和效用，无法进行等价交换。
+% \end{frame}
+
+\subsection{扩展}
+\begin{frame}{框架效应 Framing}
+	同一个问题，不用的表达方式会对人的决策产生巨大影响。主要还是体现在 人们对 “损失” 与 “收益” 的敏感
+	\begin{itemize}
+		\item 手术后一个月内的存活率是 90％。(很多人原因配合)手术后一个月内的死亡率是 10％(很多人会害怕)。
+
+		\item 拯救 200 人生命；B：1/3 拯救 600 人的生命，2/3 全部死亡；明明是同样的答案，很多人会选择 A 方案；
+
+		\item 某肉类 无脂 90\%；某肉类 含脂 10\%
+	\end{itemize}
+\end{frame}
+\begin{frame}{其他}
+	\begin{itemize}
+		\item 禀赋效应
+		\item 比例偏见
+		\item 过程忽视
+		\item 现状偏见
+		\item 适应性偏见
+		\item 凡勃仑效应
+		\item 跨期选择
+		\item 合算偏见
+	\end{itemize}
+\end{frame}
+
+\section{行为保险学}
+\label{zc}
+\subsection{完全理性的保险市场，与现实中的保险市场存在分歧}
+\begin{frame}{完全理性的保险市场，与现实中的保险市场存在分歧}
+	\begin{itemize}
+		\item[$\blacktriangleright$] 人们对“小概率、大损失风险”投保不足（Tobin \& Calfee, 2005）
+		\item[$\blacktriangleright$] 人们对“大概率、小损失风险”过度投保（Huysentruyt, 2010）
+		\item[$\blacktriangleright$] 人们喜欢选择“低免赔”或“无免赔”保险（Schwarcz, 2009）
+		\item[$\blacktriangleright$] 灾后积极投保，长时间不出事就放弃投保（Johnson, 1993）
+		\item[$\blacktriangleright$] 巨灾保险灾后大幅提价甚至不敢承保，长期不出事则低价倾销（Jaffee \& Russell, 2003）
+		\item[$\blacktriangleright$] 保险产品严重错配，该买的不买，不该买的买了很多（Culter, 2004）
+	\end{itemize}
+\end{frame}
+\begin{frame}{完全理性的保险市场，与现实中的保险市场存在分歧}
+	\begin{minipage}{.45\textwidth}
+		\begin{figure}
+			\includegraphics[width=\textwidth]{./lib/zc-1.png}
+			\caption{Tobin \& Calfee, 2005}
+		\end{figure}
+	\end{minipage}
+	\begin{minipage}{.45\textwidth}
+		\begin{itemize}
+			\item 密西西比河的洪水平均 20 年一发生，理性人会购买巨灾险
+			\item 1973-1993 发生两次洪水，但工厂的保险覆盖率仍<1\%
+			\item Tobin：行为经济学的假设，人们会低估小概率事件
+			\item 社会新闻强化了洪水是小概率事件，“百年一遇”“五百年一遇”
+			\item 实际上洪水的概率高于人们的心理认知
+		\end{itemize}
+	\end{minipage}
+\end{frame}
+
+\subsection{行为保险学的出现}
+\begin{frame}{行为保险学的出现}
+	Cutler, 2004: 理性预期下的保险经济学与保险业实践的差别越来越大，已经产生系统性偏离
+	\begin{itemize}
+		\item 掌握现代保险学经济体系的专业人士无法深入理解保险实践
+		\item 保险行业资深人士认为保险理论落后于产品实践
+		\item 迫切需要新的保险经济学理论为保险市场异象给出合理有力的解释
+	\end{itemize}
+\end{frame}
+\subsection{行为保险学的概念}
+\begin{frame}{行为保险学的概念}
+	行为保险学研究心理、社会、认知和情绪因素对经济主体保险决策和保险经验决策的影响，以及上述决策和行为对保险市场的影响
+	\begin{itemize}
+		\item  行为保险学假设决策主体是有限理性的
+		\item 决策是一种“不确定状况下的判断和决策”
+	\end{itemize}
+\end{frame}
+\subsection{行为保险学框架下的理论和研究}
+\begin{frame}{行为保险学框架下的理论和研究}
+	Kunreuther \& Pauly, 2006 “门槛决策理论”
+	\begin{itemize}
+		\item 只有当出现风险的概率超过个体自己认定的心理阈值时，个体才会关注该风险，否则，人们就认为风险不会发生，无需购买保险
+		\item 假设个体的期望效用最大化，但想要发现罕见事件的真实概率时，需要付出显性成本或隐性成本。这一成本构成了一个门槛，可能会抑制购买
+	\end{itemize}
+\end{frame}
+\begin{frame}{行为保险学框架下的理论和研究}
+	Kunreuther, Pauly \& McMorrow, 2013 发扬行为保险学框架
+
+	\begin{itemize}
+		\item[-] 从需求角度建立了一个多目标需求模型。消费者的保险购买决策是多目标的，而不仅仅是为了效用最大化，这些目标包括投资目标、情绪目标、满足社会准则、满足第三方要求等，导致保险消费偏离理性行为
+		\item[-] 从供给角度建立了描述性的供给决策模型。认为保险公司的管理者往往是风险厌恶和模糊厌恶的，当风险较大或无法准确评估时，公司管理层会过高定价甚至拒绝承保，导致公司行为偏离了利润最大化目标
+	\end{itemize}
+\end{frame}
+\begin{frame}{行为保险学框架下的理论和研究(2021)}
+
+	\begin{itemize}
+		\item[$\bigstar$] Hwang, 2021, Journal of Behavioral and Experimental Economics\\通过实证检验了前景理论的损失厌恶能否解释个体在现实世界中的保险承担行为。研究发现，损失厌恶型个体对长期护理保险、补充型残疾保险、补充型健康保险的拥有率较低
+
+		\item[$\bigstar$] Bhatia, 2021, International Journal of Consumer Studies\\使用 ADO 框架，从行为经济学角度详细讨论了消费者在购买人寿保险时的前因、决策和结果
+
+		\item[$\bigstar$] Domra, Menashe \& Yin, 2021, AER\\人寿保险的低参保率可能是由于摩擦性的注册成本，而在注册期寄送参保提醒信能有效提高参保率（1.3\%），甚至比补贴更有效
+	\end{itemize}
+\end{frame}
+
+\section{心理账户}
+\label{cxy}
+\subsection{心理账户及其在投资中的应用}
+\begin{frame}{心理账户及其在投资中的应用}
+	Pan, Carrie H. and Statman, Meir, Questionnaires of Risk Tolerance, Regret, Overconfidence, and Other Investor Propensities (March 10, 2012). SCU Leavey School of Business Research Paper No. 10-05:
+	\begin{itemize}
+		\item 每一位投资者自身有不同的心理承受水平
+		\item 根据不同的投资目标建立投资账户，对应了不同的心理承受能力
+		\item 不同的投资账户用不同的策略进行投资，遇到相同的风险情景，其表现可能不同
+	\end{itemize}
+\end{frame}
+
+
+
+\subsection{工作期对心理账户的影响}
+\begin{frame}{工作期对心理账户的影响}
+	Barsky, Robert B., F. Thomas Juster, Miles S. Kimball, and Matthew D. Shapiro, 1997, Preference parameters and behavioral heterogeneity: An experimental approach in the health and retirement study, Quarterly Journal of Economics 112, 537-579：
+	\begin{itemize}
+		\item 工作时期对于心理账户的影响；合理延伸，也就是收入对心理账户的影响；分为收入/投资的心理账户
+		\item 工作为人们在工作期间提供财富的下行保护，而投资在这些年中主要提供财富的上行潜力。
+		\item 工作期间：主要投资于股票而不是债券；投资组合的风险承受能力相对较高；上行潜力的主要考虑
+		\item 随年龄的增长和退休：工作重要性降低， 投资组合可能主要投资于债券而不是股票，反映出对投资组合的风险承受能力相对较低；下行风险的主要考虑
+	\end{itemize}
+\end{frame}
+
+
+
+\subsection{心理账户与套牢盘}
+\label{sec:orgae1548a}
+\begin{frame}{心理账户与套牢盘}
+	Frydman, Cary, Samuel M Hartzmark, and David H Solomon, 2015, Rolling mental accounts, Review of Financial Studies Forthcoming.
+	\begin{itemize}
+		\item When investors sell one asset and quickly buy another (“reinvestment days”), their trades suggest the original mental account is not closed, but is instead rolled into the new asset. Investors display a rolled disposition effect, selling the new position when its value exceeds the investment in the original position.
+		\item 沉没成本？套牢？新资产是原资产的延续？
+		\item Within each account, individuals keep track of gains and losses relative to a reference point, rather than tracking total wealth.
+		\item 时间上连续的心理账户和某一时间点被分割成不同部分的心理账户
+	\end{itemize}
+\end{frame}
+\section{参考文献}
+\subsection{参考文献}
+\begin{frame}[allowframebreaks]{参考文献}
+	\nocite{*}
+	\bibliography{reference}
+	\bibliographystyle{gbt7714-author-year}
+\end{frame}
+\end{document}

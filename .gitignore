@@ -1,0 +1,8 @@
+*.el
+/reference.bib.bak
+*.bbl
+*.pdf
+*.gz
+/lib/
+*.log
+保经导.tex
