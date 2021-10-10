@@ -6,3 +6,12 @@
 /lib/
 *.log
 保经导.tex
+*.aux
+*.blg
+*.bcf
+*.fdb_latexmk
+*.fls
+*.out
+*.toc
+*.xml
+*.xdv
