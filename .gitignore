@@ -3,7 +3,6 @@
 *.bbl
 *.pdf
 *.gz
-/lib/
 *.log
 保经导.tex
 *.aux
@@ -15,3 +14,6 @@
 *.toc
 *.xml
 *.xdv
+*.pyc
+.vscode/*
+*.xlsx
