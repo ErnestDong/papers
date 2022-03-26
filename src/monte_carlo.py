@@ -1,6 +1,7 @@
-import pandas as pd
 import numpy as np
-from src.config import *
+import pandas as pd
+
+from src.config import prepare_data, initial_investment, expected_return
 from src.markowitz import Markowitz
 
 

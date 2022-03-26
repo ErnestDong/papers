@@ -1,0 +1,86 @@
+% Created 2022-03-26 Sat 17:11
+% Intended LaTeX compiler: xelatex
+\documentclass[a4paper,12pt]{ctexart}
+\usepackage{xeCJK}
+\usepackage[backend = biber, style = gb7714-2015, url=false,gbtitlelink=true]{biblatex}
+
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{capt-of}
+\usepackage[hidelinks]{hyperref}
+\usepackage[table,xcdraw]{xcolor}
+\author{董晨阳 \thanks{学号1800015446} 许天朗 李昭伦}
+\date{\today}
+\title{风管模型第一次作业}
+\hypersetup{
+ pdfauthor={董晨阳 \thanks{学号1800015446} 许天朗 李昭伦},
+ pdftitle={风管模型第一次作业},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.0.50 (Org mode 9.6)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\section{假设}
+\label{sec:org5da1f3c}
+\begin{itemize}
+\item 资产的收益率服从正态分布，资产价格服从对数正态分布。
+\item 无风险利率 \(r=0.05\)。
+\item 可以通过融券等方式裸卖空，且 haircut 为 0。
+\end{itemize}
+\section{标的及理由}
+\label{sec:orgfdcebd3}
+我们的理念是坚持价值投资。选择标的的标准是股票之间相关性较低，不容易因疫情或者俄乌冲突等黑天鹅事件冲击到基本面，有长期持有价值的公司。基于此理念，本文将从以下几个行业中选择行业龙头公司。
+\subsection{新能源行业}
+\label{sec:org9a2787e}
+新能源无疑是近两三年以来最火热的赛道，亦是不少基金获得市场超额收益的来源。尽管新能源行业估值较高，但在燃油车被新能源车替代的大背景下，我们相信新能源渗透率将进一步提升，高估值是市场对于未来增长前景的估计，新能源赛道上获得超额收益的可能性仍然很大。当前新能源车是以电动车为主的，在可预见的几年内，电池占整车成本较高是相对确定的，新能源行业仍有右侧机会，我们建议超配。
+
+本文将着重关注比亚迪。整车方面，其混动车销量遥遥领先于其他厂家，出爆款的历史较多，且全流程技术自主可控，为少数大幅盈利的电动车为主的主机厂；电池方面磷酸铁锂电池技术领先，且即将外供；车用芯片部门即将分拆上市，亦可对母公司财务有一定的帮助。估值相对历史最高已降至 67\% 分位，我们相信公司股价受市场情绪波动而低估。
+
+此外，宁德时代作为三元电池的龙头，我们也计划对其持有一定仓位。宁德时代三元电池市占率达 57.17\% ，我们认为宁德时代将是电车时代的台积电，未来重要性将进一步上升。
+\subsection{养殖业}
+\label{sec:org87d469f}
+历史上猪企的股票表现随猪周期呈现出 48 个月左右波动。受俄乌冲突影响，全球玉米减少，豆粕期货已经上涨了相当幅度，势必会传导到下游的饲料和养殖行业。当前猪周期仍处于二次探底的阶段，22 省猪肉价格已跌至 13 元，养殖户深度亏损出清，新一轮猪周期或提前启动，目前或是养殖业是左侧布局的最佳时期。我们亦建议对养殖业超配。
+
+随着财报季的到来，猪企大幅亏损概率较大，是否能把握住周期是猪企面对的巨大考验。上一轮猪周期中牧原股份对时机把握精准，超越温氏股份成为养猪龙头。因此我们计划布局行业前二的牧原股份和温氏股份，以期其能在景气上行期抢占市场份额。
+\section{代码说明}
+\label{sec:orgad42289}
+开发环境： macOS12.3 + python 3.9
+
+推荐运行方式：
+\begin{verbatim}
+pip install poetry && poetry shell
+poetry shell
+python ./tests/test_src.py
+\end{verbatim}
+结果保存在 result.log 中，内容为
+
+\begin{verbatim}
+companys:牧原股份, 招商银行, 中国平安, 东方财富, 中国中免, 比亚迪, 温氏股份, 宁德时代, 中国建筑
+proportion:0.05716406332367887,-0.011507889327569928,-0.09348900683417324,0.20134989514587248,0.040865422930575025,0.0861138840584174,0.3197216111374898,0.3572151189497322,0.04256690061597743
+VaR src.var_cov in 10 days -1024853.2797570882
+VaR src.var_cov in 60 days -2510367.5966226864
+companys:牧原股份, 招商银行, 中国平安, 东方财富, 中国中免, 比亚迪, 温氏股份, 宁德时代, 中国建筑
+proportion:0.05716406332367887,-0.011507889327569928,-0.09348900683417324,0.20134989514587248,0.040865422930575025,0.0861138840584174,0.3197216111374898,0.3572151189497322,0.04256690061597743
+VaRsrc.historical in 10 days -1107811.5022449195
+VaRsrc.historical in 60 days -2713572.911686154
+companys:牧原股份, 招商银行, 中国平安, 东方财富, 中国中免, 比亚迪, 温氏股份, 宁德时代, 中国建筑
+proportion:0.05716406332367887,-0.011507889327569928,-0.09348900683417324,0.20134989514587248,0.040865422930575025,0.0861138840584174,0.3197216111374898,0.3572151189497322,0.04256690061597743
+VaR src.monte_carloin 10 days -1602219.678611719
+VaR src.monte_carloin 60 days -4194253.1065305998
+companys:牧原股份, 招商银行, 中国平安, 东方财富, 中国中免, 比亚迪, 温氏股份, 宁德时代, 中国建筑
+proportion:0.05716406332367887,-0.011507889327569928,-0.09348900683417324,0.20134989514587248,0.040865422930575025,0.0861138840584174,0.3197216111374898,0.3572151189497322,0.04256690061597743
+\end{verbatim}
+
+
+代码文档见 \url{./doc/develop.md}
+\end{document}

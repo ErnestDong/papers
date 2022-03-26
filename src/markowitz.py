@@ -1,9 +1,10 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy import linalg
-from src.config import *
-import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy import linalg
+
+from src.config import expected_return, initial_investment, prepare_data
 
 
 class Markowitz:
@@ -53,5 +54,6 @@ class Markowitz:
 if __name__ == "__main__":
     companies, data = prepare_data()
     markowitz = Markowitz(data)
-    markowitz.plotFrontier()
-    print(markowitz.solveMinVar(0.05))
+    # markowitz.plotFrontier()
+    print(markowitz.solveMinVar(0.05/365).to_dict())
+    # print(data)

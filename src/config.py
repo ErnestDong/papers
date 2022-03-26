@@ -1,7 +1,8 @@
 #%%
 """这段代码解决读取数据问题"""
-import pandas as pd
 import glob
+
+import pandas as pd
 
 # NOTE: _use_cols order matters!
 _use_cols = {"code": "代码", "name": "名称", "date": "日期", "price": "收盘价(元)"}
@@ -9,7 +10,7 @@ _file_path = "./lib/*.xlsx"
 expected_return = 0.05
 initial_investment = 10_000_000
 
-
+expected_return = expected_return/365
 def prepare_data():
     """
     读取数据，生产收益率数据和股票代码：股票简称映射表

@@ -1,8 +1,8 @@
-import pandas as pd
 import numpy as np
-from src.config import *
-from src.markowitz import Markowitz
 import scipy
+
+from src.config import expected_return, initial_investment, prepare_data
+from src.markowitz import Markowitz
 
 
 # portofolio = data * proportion.T.values[0]

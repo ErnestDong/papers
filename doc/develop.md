@@ -1,10 +1,9 @@
-# 风管模型第一次作业
-## 假设
-无风险利率
-收益率符合正态分布
+# source code document
 ## requirements
-recommend to use `virtual environments`.
+recommend to use `virtual environments` and `poetry`.
 ```shell
+$ pip install poetry && poetry install # install poetry
+
 $ pip install -r requirements.txt # or poetry install if you have installed poetry
 ```
 ## usage
@@ -44,4 +43,4 @@ each of them provides a `var()` to calc the solution
 trade data of stocks from wind
 
 ### doc
-maybe [readme](./README.md) is enough?
+maybe [readme](./develop.md) is enough?
