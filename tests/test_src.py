@@ -10,19 +10,27 @@ logging.basicConfig(level=logging.INFO, filename="result.log", format="%(message
 
 
 class TestSrc(unittest.TestCase):
-    def setUp(self):
-        company, data = config.prepare_data()
-        self.assertIsInstance(company, dict, "failed to parse data")
-        self.comp = company
-        self.data = data
-        markow = markowitz.Markowitz(data)
+    @classmethod
+    def setUpClass(cls):
+        cls.company, cls.data = config.prepare_data()
+        markow = markowitz.Markowitz(cls.data)
         proportion = markow.solveMinVar(config.expected_return)
-        self.proportion = proportion
-        self.assertIsInstance(proportion, pd.DataFrame, "failed to solve min var")
-        proportion = proportion.to_dict()[0]
+        cls.proportion = proportion
+
+    def setUp(self):
+        self.comp = TestSrc.company
+        self.data = TestSrc.data
+        self.proportion = TestSrc.proportion
+
+    def test_data(self):
+        self.assertIsInstance(self.comp, dict, "failed to parse data")
+        self.assertIsInstance(self.proportion, pd.DataFrame, "failed to solve min var")
+        proportion = self.proportion.to_dict()[0]
         for comp in self.comp:
             logging.info(
-                "company %s with proportion %s %%", company[comp][0], str(round(proportion[comp]*100,2))
+                "company %s with proportion %s %%",
+                self.comp[comp][0],
+                str(round(proportion[comp] * 100, 2)),
             )
 
     def test_src(self):
