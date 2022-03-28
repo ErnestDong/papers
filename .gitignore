@@ -18,3 +18,5 @@
 .vscode/*
 *.xlsx
 /readme.org
+.ropeproject/config.py
+.ob-jupyter/4e0e7bb391686cabff8e4fd95bf5a5352dca2255.png

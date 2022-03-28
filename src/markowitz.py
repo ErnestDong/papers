@@ -1,3 +1,6 @@
+"""
+利用 markowitz 有效前沿计算最优持仓分布
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -8,8 +11,6 @@ from src.config import expected_return, initial_investment, prepare_data
 
 
 class Markowitz:
-    """reference: https://zhuanlan.zhihu.com/p/158994244"""
-
     def __init__(self, returns):
         self.returns = returns
         self.cov = returns.cov()
@@ -55,5 +56,5 @@ if __name__ == "__main__":
     companies, data = prepare_data()
     markowitz = Markowitz(data)
     # markowitz.plotFrontier()
-    print(markowitz.solveMinVar(0.05/365).to_dict())
+    print(markowitz.solveMinVar(0.05 / 365).to_dict())
     # print(data)

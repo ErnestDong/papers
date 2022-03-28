@@ -1,3 +1,6 @@
+"""
+利用历史模拟法计算 VaR
+"""
 import numpy as np
 import pandas as pd
 

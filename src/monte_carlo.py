@@ -1,3 +1,6 @@
+"""
+利用蒙特卡洛模拟计算 VaR
+"""
 import numpy as np
 import pandas as pd
 

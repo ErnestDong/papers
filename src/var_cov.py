@@ -1,3 +1,6 @@
+"""
+利用方差-协方差法计算 VaR
+"""
 import numpy as np
 import scipy
 
