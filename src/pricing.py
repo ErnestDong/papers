@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 
 
@@ -34,7 +33,8 @@ class BinTreeModel:
         level : number like
             二叉树的层树
         path : function
-            是否为奇异期权。非奇异期权为 lambda x: x[-1]，回望期权为 max/min，亚式期权为 np.mean etc.
+            是否为奇异期权。非奇异期权为 lambda x: x[-1]，
+            回望期权为 max/min，亚式期权为 np.mean etc.
         hist_stock : list, optional
             历史股票的轨迹, by default None
         """
@@ -101,12 +101,16 @@ class BinTreeModel:
         )
 
 
-def model(s0, strike, sigma, t, rfrate, ngrid, method=max, path=max):
+def model(s0, strike, sigma, t, rfrate, ngrid, method=max, path=lambda x: x[-1]):
     # 构建价格二叉树图参数
     deltaT = t / (ngrid - 1)
     u = np.exp(sigma * np.sqrt(deltaT))
     d = 1 / u
     p = (np.exp(rfrate * deltaT) - d) / (u - d)
+    if path == max:
+        assert method == max
+    elif path == min:
+        assert method == min
     bintree = BinTreeModel(
         stock=s0,
         up=u,
@@ -132,5 +136,3 @@ if __name__ == "__main__":
         method=max,
     )
     print(price)
-
-# %%
