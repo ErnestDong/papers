@@ -126,7 +126,7 @@ def model(s0, strike, sigma, t, rfrate, ngrid, method=max, path=lambda x: x[-1])
 
 
 if __name__ == "__main__":
-    price = model(
+    lookback_call = model(
         s0=100,
         strike=100,
         sigma=np.log(5),
@@ -135,4 +135,4 @@ if __name__ == "__main__":
         ngrid=5,
         method=max,
     )
-    print(price)
+    print(lookback_call)
