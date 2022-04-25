@@ -53,8 +53,8 @@ class Markowitz:
 
 
 if __name__ == "__main__":
-    companies, data = prepare_data()
-    markowitz = Markowitz(data)
+    companies, data_pct = prepare_data()
+    markowitz = Markowitz(data_pct)
     # markowitz.plotFrontier()
     print(markowitz.solveMinVar(0.05 / 365).to_dict())
     # print(data)

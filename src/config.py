@@ -6,7 +6,7 @@ import pandas as pd
 
 # NOTE: _use_cols order matters!
 _use_cols = {"code": "代码", "name": "名称", "date": "日期", "price": "收盘价(元)"}
-_file_path = "./lib/*.xlsx"
+_file_path = "./lib/stocks/*.xlsx"
 expected_return = 0.05
 initial_investment = 10_000_000
 
@@ -19,26 +19,30 @@ def prepare_data():
     xlsx_list = glob.glob(_file_path)
     xlsx_list = [i for i in xlsx_list if "~$" not in i]
     assert xlsx_list
+    result_pct = pd.DataFrame()
     result = pd.DataFrame()
     code_name_map = {}
     for xlsx in xlsx_list:
         df = pd.read_excel(xlsx, usecols=_use_cols.values())
         df.rename(columns={i: j for j, i in _use_cols.items()}, inplace=True)
-        df = df[df["code"] != "数据来源：Wind"]
+        df = df[df["code"] != "数据来源：Wind"].sort_index()
         df = df.dropna()
-        code_name_map[df["code"].values[0]] = (
-            df["name"].values[0],
-            df["price"].values[-1],
-        )
-        df["price"] = df["price"].pct_change()
+        code_name_map[df["code"].values[0]] = df["name"].values[0]
+        df = df.drop(columns=["name"])
         result = pd.concat([result, df])
+        df["price"] = df["price"].pct_change()
+        result_pct = pd.concat([result_pct, df])
 
+    result_pct = result_pct.pivot(index="date", columns="code", values="price")
     result = result.pivot(index="date", columns="code", values="price")
+    result_pct = result_pct.dropna()
     result = result.dropna()
-    if len(result) < 500:
+    if len(result_pct) < 500:
         raise ValueError("数据量不足 500 天")
-    return code_name_map, result
+    return code_name_map, result_pct, result
 
 
 if __name__ == "__main__":
     print(prepare_data())
+
+# %%

@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class BinTreeModel:
     def __init__(
         self,
@@ -101,8 +100,10 @@ class BinTreeModel:
         )
 
 
-def model(s0, strike, sigma, t, rfrate, ngrid, method=max, path=lambda x: x[-1]):
+def model(s0, strike, sigma, t, rfrate, ngrid=None, method=max, path=lambda x: x[-1]):
     # 构建价格二叉树图参数
+    if ngrid == None:
+        ngrid = t + 1
     deltaT = t / (ngrid - 1)
     u = np.exp(sigma * np.sqrt(deltaT))
     d = 1 / u
@@ -127,12 +128,10 @@ def model(s0, strike, sigma, t, rfrate, ngrid, method=max, path=lambda x: x[-1])
 
 if __name__ == "__main__":
     lookback_call = model(
-        s0=100,
-        strike=100,
-        sigma=np.log(5),
-        t=4,
-        rfrate=1,
-        ngrid=5,
-        method=max,
+        s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5, path=max
     )
-    print(lookback_call)
+    euro_call = model(s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5)
+    asian_call = model(
+        s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5, path=np.mean
+    )
+    print(lookback_call, euro_call, asian_call)
