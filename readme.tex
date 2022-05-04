@@ -1,0 +1,47 @@
+\documentclass[a4paper,12pt]{ctexart}
+\usepackage{xeCJK}
+\usepackage[backend = biber, style = gb7714-2015, url=false,gbtitlelink=true]{biblatex}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{capt-of}
+\usepackage[hidelinks]{hyperref}
+\usepackage[table,xcdraw]{xcolor}
+\author{董晨阳 \thanks{学号1800015446} 许天朗 \thanks{学号1800015428} 李昭伦 \thanks{学号1800015469}}
+\date{\today}
+\title{风管模型基金运行报告}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{风险偏好和目标设定}
+作为2021 年年底成立的新基金，本基金被动追踪一篮子股票的价值，持仓份额如表\ref{holdings} 所示。
+\begin{table}[ht]
+	\begin{tabular}{rrrrrrrrr}
+		比亚迪    & 牧原股份    & 东方财富    & 温氏股份   & 宁德时代   \\
+		0.0516 & -0.0129 & -0.0957 & 0.2051 & 0.0193 \\
+		招商银行   & 中国平安    & 中国建筑    & 中国中免            \\
+		0.0521 & 0.3665  & 0.3774  & 0.0366          \\
+	\end{tabular}
+    \caption{持仓份额}
+    \label{holdings}
+\end{table}
+
+遵循一般私募基金运行惯例，本基金预警线设置为份额净值 0.8 元，止损线设置为份额净值 0.7 元。
+触及预警线时，私募行业一般要求管理人及时减仓，直到净值重归预警线之上才能加仓。
+触及止损线时，一般要求管理人无条件清仓，并将剩余的投资款返还客户。
+双线作为一把“双刃剑”，一方面明确了安全边际，促使管理人谨慎投资并配置风控预案。另一方面，双线也加大了管理人在极端行情下的操作难度，大规模私募基金的减仓清盘行为甚至会加剧市场的波动。
+
+本基金的业绩基准为沪深300 ETF。因而本基金的目标为在 300ETF 之上取得相对收益的同时，在四个月运行期间避免触及预警和清盘线。综上，本基金的风险偏好为每月最多亏损\(1-0.8^{1/4}\approx 0.05\)，即每月净值下跌至多5\%。
+
+
+\section{策略理由和面临的风险}
+因此本基金将采取 protective put 策略，即在持有股票的同时，每月月初在市场上购入适当的月末到期的、执行价格为 95\% 的沪深 300ETF 看跌期权。
+\section{当前策略成果}
+\end{document}

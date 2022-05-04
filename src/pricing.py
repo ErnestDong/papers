@@ -1,4 +1,7 @@
 import numpy as np
+from functools import partial
+from typing import Callable
+
 
 class BinTreeModel:
     def __init__(
@@ -50,6 +53,7 @@ class BinTreeModel:
             self.hist_stock = list(hist_stock)
         self.hist_stock.append(stock)
         self._build(level, strike, path)
+        self.optionvalue: None | float = None
 
     def backward(self):
         """
@@ -100,7 +104,16 @@ class BinTreeModel:
         )
 
 
-def model(s0, strike, sigma, t, rfrate, ngrid=None, method=max, path=lambda x: x[-1]):
+def model(
+    s0,
+    strike,
+    sigma,
+    t,
+    rfrate,
+    ngrid=None,
+    method=max,
+    path: Callable = lambda x: x[-1],
+):
     # 构建价格二叉树图参数
     if ngrid == None:
         ngrid = t + 1
@@ -108,10 +121,10 @@ def model(s0, strike, sigma, t, rfrate, ngrid=None, method=max, path=lambda x: x
     u = np.exp(sigma * np.sqrt(deltaT))
     d = 1 / u
     p = (np.exp(rfrate * deltaT) - d) / (u - d)
-    if path == max:
-        assert method == max
-    elif path == min:
-        assert method == min
+    if path is max:
+        assert method is max
+    elif path is min:
+        assert method is min
     bintree = BinTreeModel(
         stock=s0,
         up=u,
@@ -127,11 +140,12 @@ def model(s0, strike, sigma, t, rfrate, ngrid=None, method=max, path=lambda x: x
 
 
 if __name__ == "__main__":
-    lookback_call = model(
-        s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5, path=max
+    euro_put = partial(
+        model, rfrate=0.05 / 252, ngrid=15, method=min, path=lambda x: x[-1]
     )
-    euro_call = model(s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5)
-    asian_call = model(
-        s0=100, strike=100, sigma=np.log(5), t=4, rfrate=1, ngrid=5, path=np.mean
+    euro_call = partial(
+        model, rfrate=0.05 / 252, ngrid=15, method=max, path=lambda x: x[-1]
     )
-    print(lookback_call, euro_call, asian_call)
+    lookback_call = partial(model, rfrate=0.05 / 252, ngrid=15, method=max, path=max)
+    asian_call = partial(model, rfrate=0.05 / 252, ngrid=15, method=max, path=np.mean)
+    print(euro_put(s0=100, strike=90, sigma=10, t=31))

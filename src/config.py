@@ -10,7 +10,9 @@ _file_path = "./lib/stocks/*.xlsx"
 expected_return = 0.05
 initial_investment = 10_000_000
 
-expected_return = expected_return/365
+expected_return = expected_return / 365
+
+
 def prepare_data():
     """
     读取数据，生产收益率数据和股票代码：股票简称映射表

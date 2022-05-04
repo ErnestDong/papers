@@ -1,5 +1,6 @@
 #%%
 # %cd ..
+#%%
 from src.config import expected_return, initial_investment, prepare_data
 from src.markowitz import Markowitz
 from src.pricing import model
@@ -8,7 +9,10 @@ from functools import partial
 import numpy as np
 import datetime
 import logging
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.set(style="whitegrid")
 logging.basicConfig(level=logging.INFO)
 companies, data_pct, data = prepare_data()
 portofolio = (
@@ -43,7 +47,7 @@ class Month:
         self,
         df: pd.DataFrame,
         optiondf: pd.DataFrame | None,
-        warning=0.97,
+        warning=0.98,
         month=1,
         init=initial_investment,
     ):
@@ -95,27 +99,46 @@ class Month:
         if self.optiondf is not None:
             logging.info("month: %s start" % self.month)
             hedge_cost = self.start_month()
-            tmp = (self.init - hedge_cost)/ self.funddf["value"].values[0] * self.funddf["value"]
-            final = max(tmp.iloc[-1], (self.init - hedge_cost)*self.warning)
-            tmp.iloc[-1]=final
+            tmp = (
+                (self.init - hedge_cost)
+                / self.funddf["value"].values[0]
+                * self.funddf["value"]
+            )
+            final = max(tmp.iloc[-1], (self.init - hedge_cost) * self.warning)
+            tmp.iloc[-1] = final
             return tmp.map(lambda x: x if x > final else final)
             # return tmp
         else:
             logging.info("month: %s start without hedge" % self.month)
-            tmp = self.init/ self.funddf["value"].values[0] * self.funddf["value"]
+            tmp = self.init / self.funddf["value"].values[0] * self.funddf["value"]
             return tmp
 
 
 current_with_option = [pd.Series(initial_investment)]
-current_without_option =  [pd.Series(initial_investment)]
-for month in range(1, 4):
-    month1 = Month(fund, option_etf, month=month, init=current_with_option[-1].values[-1])
-    month2 = Month(fund, optiondf=None, month=month, init=current_without_option[-1].values[-1])
+current_without_option = [pd.Series(initial_investment)]
+for month in range(1, 5):
+    month1 = Month(
+        fund, option_etf, month=month, init=current_with_option[-1].values[-1]
+    )
+    month2 = Month(
+        fund, optiondf=None, month=month, init=current_without_option[-1].values[-1]
+    )
     current_with_option.append(month1.end_month())
     current_without_option.append(month2.end_month())
 
 with_option = pd.concat(current_with_option[1:])
 without_option = pd.concat(current_without_option[1:])
-result = pd.DataFrame({"with_option": with_option, "without_option": without_option})
+benchmark = option_etf[option_etf.index >= datetime.datetime(2022, 1, 1)]
+result = pd.DataFrame(
+    {
+        "with_option": with_option,
+        "without_option": without_option,
+        "300etf": benchmark["value"]
+        / benchmark["value"].values[0]
+        * initial_investment,
+    }
+)
 result.plot()
+plt.savefig("./lib/result/result.png")
+# %%
 # %%
