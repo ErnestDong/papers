@@ -7,7 +7,7 @@ import pandas as pd
 import seaborn as sns
 from scipy import linalg
 
-from src.config import expected_return, initial_investment, prepare_data
+from src.config import prepare_data
 
 
 class Markowitz:
@@ -53,7 +53,7 @@ class Markowitz:
 
 
 if __name__ == "__main__":
-    companies, data_pct = prepare_data()
+    companies, data_pct, _ = prepare_data()
     markowitz = Markowitz(data_pct)
     # markowitz.plotFrontier()
     print(markowitz.solveMinVar(0.05 / 365).to_dict())

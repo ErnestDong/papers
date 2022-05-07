@@ -1,6 +1,7 @@
-import numpy as np
 from functools import partial
-from typing import Callable
+from typing import Callable, Optional
+
+import numpy as np
 
 
 class BinTreeModel:
@@ -53,14 +54,14 @@ class BinTreeModel:
             self.hist_stock = list(hist_stock)
         self.hist_stock.append(stock)
         self._build(level, strike, path)
-        self.optionvalue: None | float = None
+        self.optionvalue: Optional[float] = None
 
     def backward(self):
         """
         后向求解
         """
         # 如果是叶子节点，则直接返回该节点处的价格
-        if self.left is None:
+        if self.left is None or self.right is None:
             stockvalue = self.path(self.hist_stock)
             self.optionvalue = np.abs(self.option_type(stockvalue - self.strike, 0))
         # 如果是非叶子节点，则递归调用左右子树的后向求解

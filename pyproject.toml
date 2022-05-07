@@ -25,3 +25,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pyright]
 extraPath = ["./.venv/lib"]
 useLibraryCodeForTypes = true
+[tool.black]
+line-length = 88
+[tool.isort]
+profile = "black"

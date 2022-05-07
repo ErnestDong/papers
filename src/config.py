@@ -25,12 +25,14 @@ def prepare_data():
     result = pd.DataFrame()
     code_name_map = {}
     for xlsx in xlsx_list:
-        df = pd.read_excel(xlsx, usecols=_use_cols.values())
+        df: pd.DataFrame = pd.read_excel(
+            xlsx, usecols=_use_cols.values()
+        )  # pyright: ignore
         df.rename(columns={i: j for j, i in _use_cols.items()}, inplace=True)
         df = df[df["code"] != "数据来源：Wind"].sort_index()
-        df = df.dropna()
+        df.dropna(inplace=True)
         code_name_map[df["code"].values[0]] = df["name"].values[0]
-        df = df.drop(columns=["name"])
+        df.drop(columns=["name"], inplace=True)
         result = pd.concat([result, df])
         df["price"] = df["price"].pct_change()
         result_pct = pd.concat([result_pct, df])
@@ -39,7 +41,7 @@ def prepare_data():
     result = result.pivot(index="date", columns="code", values="price")
     result_pct = result_pct.dropna()
     result = result.dropna()
-    if len(result_pct) < 500:
+    if len(result_pct) < 500 or result_pct is None:
         raise ValueError("数据量不足 500 天")
     return code_name_map, result_pct, result
 
