@@ -17,6 +17,7 @@ QuantLib = "^1.25"
 ipykernel = "^6.9.2"
 pytest = "^7.1.1"
 debugpy = "^1.6.0"
+Pygments = "^2.12.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
