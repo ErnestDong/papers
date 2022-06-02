@@ -1,6 +1,10 @@
 \documentclass[11pt]{article}
 \usepackage{xeCJK}
-
+\author{
+    董晨阳 \thanks{学号1800015446}
+    李昭伦 \thanks{学号1800015469}
+    许天朗 \thanks{学号1800015428}
+}
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
 
@@ -165,7 +169,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{main}
+    \title{风管模型第三次作业}
 
 
 
@@ -392,6 +396,8 @@
     \hypertarget{ux98ceux7ba1ux6a21ux578bux7b2cux4e09ux6b21ux4f5cux4e1a}{%
 \section{风管模型第三次作业}\label{ux98ceux7ba1ux6a21ux578bux7b2cux4e09ux6b21ux4f5cux4e1a}}
 
+
+
     \hypertarget{ux5355ux4e2aux516cux53f8ux7684-kmv-ux6a21ux578b}{%
 \subsection{单个公司的 KMV
 模型}\label{ux5355ux4e2aux516cux53f8ux7684-kmv-ux6a21ux578b}}
@@ -402,22 +408,27 @@
 \begin{itemize}
 \tightlist
 \item
-  无风险利率为 0.03
+  市场的无风险利率为3\%
 \item
-  违约点为 短债+0.5*长债
+  公司的违约实施点为企业1年以下短期债务的价值加上未清偿长期债务账面价值的一半
 \item
   贷款期限一年
 \item
-  违约回收率 0
+  当公司发生违约时，违约回收率为0，即全部贷款均不能回收。
 \item
-  贷款利率为 无风险利率+预期违约率*100
+  贷款利率为包括流动性溢价和信用溢价，分别用无风险利率和预期违约率\$\times\$100表示，即贷款利率
+  = 无风险利率 + 预期违约率 \(\times\) 100
 \end{itemize}
 
 \hypertarget{ux8ba1ux7b97ux80a1ux7968ux4ef7ux683cux6ce2ux52a8ux7387}{%
 \subsubsection{计算股票价格波动率}\label{ux8ba1ux7b97ux80a1ux7968ux4ef7ux683cux6ce2ux52a8ux7387}}
 
+我们选取了三家上市公司，分别为比亚迪，三一重工，宁德时代，比亚迪为汽车厂商，三一重工为国有大型装备制造厂商，宁德时代为我国新能源电池领头企业，三家厂商都具备较好的现金流以及信用背书，因此是我们选取的贷款对象。
+
+根据三家公司的历史股价数据，我们计算出三家厂商的股票波动率。
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{2}{\boxspacing}
+\prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k+kn}{import} \PY{n+nn}{glob}
 
@@ -442,7 +453,7 @@
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{2}{\boxspacing}
+\prompt{Out}{outcolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
                 比亚迪     三一重工     宁德时代
 时间
@@ -466,8 +477,11 @@
 \subsubsection{利用 garch
 模型计算相关系数与协方差阵}\label{ux5229ux7528-garch-ux6a21ux578bux8ba1ux7b97ux76f8ux5173ux7cfbux6570ux4e0eux534fux65b9ux5deeux9635}}
 
+假设三只股票的收益率服从GARCH
+(1,1)，然后算出得到标的资产组合的协方差矩阵和相关阵。
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{3}{\boxspacing}
+\prompt{In}{incolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{cov} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
 \PY{n}{var} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
@@ -535,7 +549,7 @@ Name: params, dtype: float64
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{3}{\boxspacing}
+\prompt{Out}{outcolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
            比亚迪      三一重工      宁德时代
 比亚迪   1.000000  0.828724  0.829693
@@ -548,7 +562,7 @@ Name: params, dtype: float64
 \subsubsection{计算违约点}\label{ux8ba1ux7b97ux8fddux7ea6ux70b9}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{4}{\boxspacing}
+\prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{companies} \PY{o}{=} \PY{n}{glob}\PY{o}{.}\PY{n}{glob}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lib/balance/*.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{companies}\PY{p}{:}
@@ -564,18 +578,20 @@ Name: params, dtype: float64
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{4}{\boxspacing}
+\prompt{Out}{outcolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \{'比亚迪': 20064279.95, '三一重工': 7162113.5, '宁德时代': 24339099.135\}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \hypertarget{ux9884ux671fux8fddux7ea6ux6982ux7387-edf}{%
-\subsubsection{预期违约概率
-EDF}\label{ux9884ux671fux8fddux7ea6ux6982ux7387-edf}}
+    \hypertarget{ux8ba1ux7b97ux9884ux671fux8fddux7ea6ux6982ux7387-edf}{%
+\subsubsection{计算预期违约概率
+EDF}\label{ux8ba1ux7b97ux9884ux671fux8fddux7ea6ux6982ux7387-edf}}
+
+利用KMV模型，我们计算了三家公司各自的预期违约概率，结果如下：
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{5}{\boxspacing}
+\prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{def} \PY{n+nf}{kmv}\PY{p}{(}\PY{n}{r}\PY{p}{,} \PY{n}{sigma\PYZus{}e}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{equity}\PY{p}{,} \PY{n}{debt}\PY{p}{)}\PY{p}{:}
     \PY{k}{def} \PY{n+nf}{option}\PY{p}{(}\PY{n}{w}\PY{p}{)}\PY{p}{:}
@@ -614,7 +630,7 @@ EDF}\label{ux9884ux671fux8fddux7ea6ux6982ux7387-edf}}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{5}{\boxspacing}
+\prompt{Out}{outcolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
           比亚迪          三一重工      宁德时代
 edf  0.000071  2.817646e-08  0.000054
@@ -625,26 +641,27 @@ dd  -3.805921 -5.430004e+00 -3.872672
     \hypertarget{ux7ec4ux5408ux7684ux8fddux7ea6ux6982ux7387}{%
 \subsection{组合的违约概率}\label{ux7ec4ux5408ux7684ux8fddux7ea6ux6982ux7387}}
 
-以下 code cell 分别为全部违约、两个公司违约、三个公司违约的概率
+依据\cite{任宇航2006信用风险组合管理模型中的相关性问题研究述评}提出的算法，\(DD\)
+服从联合多元标准正态分布，且相关系数等于资产的相关系数，因而以下 code
+cell 分别为全部违约、两个公司违约、三个公司违约的概率
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{6}{\boxspacing}
+\prompt{In}{incolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{cov} \PY{o}{=} \PY{n}{rate}\PY{o}{.}\PY{n}{cov}\PY{p}{(}\PY{p}{)}
 \PY{n}{alldefault} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{multivariate\PYZus{}normal}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dd}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{cov}\PY{o}{=}\PY{n}{cov}\PY{p}{)}
 \PY{n}{alldefault}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{6}{\boxspacing}
+\prompt{Out}{outcolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 0.0
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{7}{\boxspacing}
+\prompt{In}{incolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{twodefault} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
 \PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{edf}\PY{p}{:}
@@ -660,14 +677,14 @@ dd  -3.805921 -5.430004e+00 -3.872672
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{7}{\boxspacing}
+\prompt{Out}{outcolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \{('三一重工', '宁德时代'): 0.0, ('比亚迪', '宁德时代'): 0.0, ('比亚迪', '三一重工'): 0.0\}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{8}{\boxspacing}
+\prompt{In}{incolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{onedefault} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
 \PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{edf}\PY{p}{:}
@@ -680,7 +697,7 @@ dd  -3.805921 -5.430004e+00 -3.872672
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{8}{\boxspacing}
+\prompt{Out}{outcolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \{'比亚迪': 7.063880677575358e-05,
  '三一重工': 2.8176458428261814e-08,
@@ -691,22 +708,22 @@ dd  -3.805921 -5.430004e+00 -3.872672
     \hypertarget{ux8d37ux6b3eux6bd4ux4f8bux4e0eux4fe1ux7528ux98ceux9669}{%
 \subsection{贷款比例与信用风险}\label{ux8d37ux6b3eux6bd4ux4f8bux4e0eux4fe1ux7528ux98ceux9669}}
 
+利用以上的结果，我们以贷款给这三家公司的期望收益为标准，选择期望收益最大化的贷款分配比例。由于违约概率都很小，贷款的
+\(VaR\)
+指导意义较弱，因而我们选择最大化期望收益。最终的结果是100\%贷给违约风险相对更高但绝对值仍然很低的比亚迪，以获得最高的期望收益。
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{12}{\boxspacing}
+\prompt{In}{incolor}{8}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{partition} \PY{o}{=} \PY{p}{[}
-    \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{比亚迪}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{i} \PY{o}{/} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三一重工}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{j} \PY{o}{/} \PY{l+m+mi}{100}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{宁德时代}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}  \PY{p}{(}\PY{l+m+mi}{100} \PY{o}{\PYZhy{}} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{n}{j}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{100}\PY{p}{\PYZcb{}} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{)} \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{101} \PY{o}{\PYZhy{}} \PY{n}{i}\PY{p}{)}
-\PY{p}{]}
 \PY{n}{zerodefault} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{alldefault} \PY{o}{\PYZhy{}} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{twodefault}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{onedefault}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \PY{n}{return\PYZus{}rate} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{1.03}\PY{o}{+}\PY{n}{edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{edf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{*} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
-\PY{n}{maxfinal} \PY{o}{=} \PY{l+m+mi}{0}
-\PY{n}{maxGroup} \PY{o}{=} \PY{k+kc}{None}
-\PY{k}{for} \PY{n}{case} \PY{o+ow}{in} \PY{n}{partition}\PY{p}{:}
+\PY{k}{def} \PY{n+nf}{expected\PYZus{}return}\PY{p}{(}\PY{n}{case}\PY{p}{)}\PY{p}{:}
+    \PY{n}{case} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{比亚迪}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三一重工}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{case}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{宁德时代}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}
     \PY{n}{final} \PY{o}{=} \PY{p}{(}
         \PY{n}{alldefault} \PY{o}{*} \PY{l+m+mi}{0}
         \PY{o}{+} \PY{n+nb}{sum}\PY{p}{(}
             \PY{p}{[}
-                \PY{n}{twodefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{*}\PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+                \PY{n}{twodefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
                 \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{twodefault}
                 \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{onedefault}
                 \PY{k}{if} \PY{n}{j} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{i}
@@ -714,27 +731,38 @@ dd  -3.805921 -5.430004e+00 -3.872672
         \PY{p}{)}
         \PY{o}{+} \PY{n+nb}{sum}\PY{p}{(}
             \PY{p}{[}
-                \PY{n}{onedefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{*}\PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+                \PY{n}{onedefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
                 \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{onedefault}
                 \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{onedefault}
                 \PY{k}{if} \PY{n}{j} \PY{o}{!=} \PY{n}{i}
             \PY{p}{]}
         \PY{p}{)}
-        \PY{o}{+} \PY{n}{zerodefault} \PY{o}{*} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{*}\PY{n}{case}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{onedefault}\PY{p}{]}\PY{p}{)}
+        \PY{o}{+} \PY{n}{zerodefault} \PY{o}{*} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{onedefault}\PY{p}{]}\PY{p}{)}
     \PY{p}{)}
-    \PY{k}{if} \PY{n}{final} \PY{o}{\PYZgt{}} \PY{n}{maxfinal}\PY{p}{:}
-        \PY{n}{maxfinal} \PY{o}{=} \PY{n}{final}
-        \PY{n}{maxGroup} \PY{o}{=} \PY{n}{case}
-\PY{n}{case}\PY{p}{,} \PY{n}{maxfinal}
+    \PY{k}{return} \PY{o}{\PYZhy{}}\PY{n}{final}
+
+
+\PY{n}{case} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}
+    \PY{n}{expected\PYZus{}return}\PY{p}{,}
+    \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
+    \PY{n}{constraints}\PY{o}{=}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{eq}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fun}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{,}
+    \PY{n}{bounds}\PY{o}{=}\PY{p}{[}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]} \PY{o}{*} \PY{l+m+mi}{3}\PY{p}{,}
+\PY{p}{)}\PY{o}{.}\PY{n}{x}
+\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{比亚迪}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三一重工}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{case}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{宁德时代}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{12}{\boxspacing}
+\prompt{Out}{outcolor}{8}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-(\{'比亚迪': 0.99, '三一重工': 0.01, '宁德时代': 0.0\}, 1.100393107972961)
+\{'比亚迪': 0.9999999999999999, '三一重工': 0.0, '宁德时代': 2.220446049250313e-16\}
 \end{Verbatim}
 \end{tcolorbox}
+
+    \nocite{*}
+
+\bibliographystyle{plain}
+\bibliography{reference}
 
 
     % Add a bibliography block to the postdoc

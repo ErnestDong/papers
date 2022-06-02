@@ -194,5 +194,3 @@ for case in partition:
         maxfinal = final
         maxGroup = case
 case, maxfinal
-
-
