@@ -1,10 +1,13 @@
 \documentclass{article}
 \usepackage{xeCJK}
+\usepackage{indentfirst}
 \usepackage[style=gb7714-2015ay]{biblatex}
-\addbibresource{ref}
-\title{Blockchain in insurance}
+\usepackage{graphicx}
+\usepackage[section]{placeins}
+\addbibresource{ref.bib}
+\title{Blockchain Can Reform Life Insurance}
 \author{
-    董晨阳\thanks{学号 1800015446}
+    董晨阳\thanks{学号 1800015446}\quad
     李昭伦\thanks{学号 1800015469}
 }
 \date{\today}
@@ -13,9 +16,13 @@
 
 \maketitle
 \tableofcontents
+\thispagestyle{empty}
 \clearpage
-
-\section{Introduction}
+\pagenumbering{arabic}
+\input{chap/part1}
+% \input{chap/part2}
+\input{chap/part3}
+\clearpage
 \appendix
-\printbibliography
+\input{chap/appendix}
 \end{document}
