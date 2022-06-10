@@ -7,7 +7,7 @@
 }
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
-    
+
 
     % Basic figure setup, for now with no caption control since it's done
     % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
@@ -84,9 +84,9 @@
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
     \usepackage{mathrsfs}
-    
 
-    
+
+
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
@@ -170,11 +170,11 @@
     % Document parameters
     % Document title
     \title{main}
-    
-    
-    
-    
-    
+
+
+
+
+
 % Pygments definitions
 \makeatletter
 \def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
@@ -367,9 +367,9 @@
     \newcommand{\prompt}[4]{
         {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
     }
-    
 
-    
+
+
     % Prevent overflowing lines due to hard-to-break entities
     \sloppy
     % Setup hyperref package
@@ -381,30 +381,25 @@
       citecolor=citecolor,
       }
     % Slightly bigger margins than the latex defaults
-    
+
     \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-    
-    
+
+
 
 \begin{document}
-    
-    \maketitle
-    
-    
 
-    
+    \maketitle
+
+
+
+
     \hypertarget{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}{%
 \section{风管模型第四次作业}\label{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}}
 
-\hypertarget{ux7b2cux4e00ux9898}{%
-\subsection{第一题}\label{ux7b2cux4e00ux9898}}
-
-\hypertarget{ln-ux6a21ux578b}{%
-\subsubsection{LN 模型}\label{ln-ux6a21ux578b}}
-
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{14}{\boxspacing}
+\prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
 \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
 \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
 \PY{k+kn}{from} \PY{n+nn}{arch} \PY{k+kn}{import} \PY{n}{arch\PYZus{}model}
@@ -412,16 +407,63 @@
 \PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{arima}\PY{n+nn}{.}\PY{n+nn}{model} \PY{k+kn}{import} \PY{n}{ARIMA}
 \PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{regime\PYZus{}switching}\PY{n+nn}{.}\PY{n+nn}{markov\PYZus{}regression} \PY{k+kn}{import} \PY{n}{MarkovRegression}
 
-
-\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{./lib/创业板指.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{skipfooter}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{代码}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{名称}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{importing done}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimHei}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{k+kc}{False}
+\PY{n}{result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{df} \PY{o}{=} \PY{p}{(}
+    \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{./lib/创业板指.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{skipfooter}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
+    \PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{代码}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{名称}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{p}{)}
 \PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
     \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{dtype} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{object}\PY{l+s+s2}{\PYZdq{}} \PY{k}{else} \PY{n}{x}
 \PY{p}{)}
 \PY{n}{df}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{p}{)}
-\PY{n}{result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
 \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weeknum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{year}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{isocalendar}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{week}\PY{p}{)}\PY{p}{)}
-\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{drop\PYZus{}duplicates}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weeknum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\PY{c+c1}{\PYZsh{} log = df[\PYZdq{}收盘价\PYZdq{}].apply(np.log)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kde}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+importing done
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<AxesSubplot:ylabel='Density'>
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{main_files/main_1_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+    \hypertarget{ux7b2cux4e00ux9898}{%
+\subsection{第一题}\label{ux7b2cux4e00ux9898}}
+
+\hypertarget{ln-ux6a21ux578b}{%
+\subsubsection{LN 模型}\label{ln-ux6a21ux578b}}
+
+我们依据\cite{wang2020corrected} 提出的算法，对 Lognormal
+模型进行最大似然估计，即
+
+\[
+\log(L) = -\sum_{i=1}^n\log x_i-n\log\sigma-\frac{n}{2}\log 2\pi - \sum_{i=11^n}\frac{(\log x_i-\mu)^2}{2\sigma^2}
+\]
+
+采用样本均值 \(\hat\mu\) 和样本方差 \(\hat\sigma^2\) 代入计算
+\(AIC\)、\(SBC\)，得到的结果如下表所示
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} df[\PYZdq{}weeknum\PYZdq{}] = df.index.map(lambda x: str(x.year) + \PYZdq{}\PYZhy{}\PYZdq{} + str(x.isocalendar().week))}
+\PY{c+c1}{\PYZsh{} df = df.drop\PYZus{}duplicates(subset=\PYZdq{}weeknum\PYZdq{}, keep=\PYZdq{}last\PYZdq{})}
 \PY{n}{log} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
 \PY{n}{mu} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \PY{n}{sigma} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
@@ -430,7 +472,7 @@
 \PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
 \PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{likelyhood\PYZus{}ln}
 \PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LN}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
@@ -440,18 +482,18 @@
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{14}{\boxspacing}
+\prompt{Out}{outcolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
             AIC          SBC    k       log(L)
-LN  1022.312383  1017.890761  2.0  1024.312383
+LN  7318.588555  7312.609901  2.0  7320.588555
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{ar1-ux6a21ux578b}{%
 \subsubsection{AR(1) 模型}\label{ar1-ux6a21ux578b}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{15}{\boxspacing}
+\prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{model} \PY{o}{=} \PY{n}{ARIMA}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
 \PY{n}{AR1} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
@@ -470,29 +512,29 @@ LN  1022.312383  1017.890761  2.0  1024.312383
     \begin{Verbatim}[commandchars=\\\{\}]
                                SARIMAX Results
 ==============================================================================
-Dep. Variable:                      y   No. Observations:                  615
-Model:                 ARIMA(1, 0, 0)   Log Likelihood                1024.615
-Date:                Tue, 07 Jun 2022   AIC                          -2043.230
-Time:                        20:22:31   BIC                          -2029.965
-Sample:                             0   HQIC                         -2038.072
-                                - 615
+Dep. Variable:                      y   No. Observations:                 2918
+Model:                 ARIMA(1, 0, 0)   Log Likelihood                7325.165
+Date:                Fri, 10 Jun 2022   AIC                         -14644.330
+Time:                        17:23:25   BIC                         -14626.394
+Sample:                             0   HQIC                        -14637.870
+                               - 2918
 Covariance Type:                  opg
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const          0.0015      0.002      0.800      0.424      -0.002       0.005
-ar.L1         -0.0314      0.035     -0.908      0.364      -0.099       0.036
-sigma2         0.0021   8.75e-05     23.886      0.000       0.002       0.002
+const          0.0003      0.000      0.803      0.422      -0.000       0.001
+ar.L1          0.0560      0.014      3.952      0.000       0.028       0.084
+sigma2         0.0004   7.47e-06     51.702      0.000       0.000       0.000
 ================================================================================
 ===
-Ljung-Box (L1) (Q):                   0.00   Jarque-Bera (JB):
-147.66
-Prob(Q):                              0.97   Prob(JB):
+Ljung-Box (L1) (Q):                   0.01   Jarque-Bera (JB):
+527.59
+Prob(Q):                              0.91   Prob(JB):
 0.00
 Heteroskedasticity (H):               0.93   Skew:
--0.57
-Prob(H) (two-sided):                  0.60   Kurtosis:
-5.11
+-0.45
+Prob(H) (two-sided):                  0.25   Kurtosis:
+4.88
 ================================================================================
 ===
 
@@ -502,19 +544,19 @@ step).
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{15}{\boxspacing}
+\prompt{Out}{outcolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
          k       log(L)          AIC          SBC
-LN     2.0  1024.312383  1022.312383  1017.890761
-AR(1)  3.0  1024.614985  1021.614985  1014.982551
+LN     2.0  7320.588555  7318.588555  7312.609901
+AR(1)  3.0  7325.165137  7322.165137  7313.197156
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{arch-ux6a21ux578b}{%
 \subsubsection{ARCH 模型}\label{arch-ux6a21ux578b}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{16}{\boxspacing}
+\prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{arch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
 \PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{arch}\PY{o}{.}\PY{n}{loglikelihood}
@@ -531,51 +573,51 @@ AR(1)  3.0  1024.614985  1021.614985  1014.982551
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Optimization terminated successfully    (Exit mode 0)
-            Current function value: -1001.7471367001739
-            Iterations: 6
-            Function evaluations: 14
-            Gradient evaluations: 2
+            Current function value: -7217.643023614901
+            Iterations: 5
+            Function evaluations: 49
+            Gradient evaluations: 4
                       Constant Mean - ARCH Model Results
 ==============================================================================
 Dep. Variable:                 收盘价(元)   R-squared:                       0.000
 Mean Model:             Constant Mean   Adj. R-squared:                  0.000
-Vol Model:                       ARCH   Log-Likelihood:                1001.75
-Distribution:                  Normal   AIC:                          -1997.49
-Method:            Maximum Likelihood   BIC:                          -1984.23
-                                        No. Observations:                  615
-Date:                Tue, Jun 07 2022   Df Residuals:                      614
-Time:                        20:22:31   Df Model:                            1
+Vol Model:                       ARCH   Log-Likelihood:                7217.64
+Distribution:                  Normal   AIC:                          -14429.3
+Method:            Maximum Likelihood   BIC:                          -14411.4
+                                        No. Observations:                 2918
+Date:                Fri, Jun 10 2022   Df Residuals:                     2917
+Time:                        17:23:25   Df Model:                            1
                                   Mean Model
 =============================================================================
                  coef    std err          t      P>|t|       95.0\% Conf. Int.
 -----------------------------------------------------------------------------
-mu         2.6863e-03  1.845e-03      1.456      0.145 [-9.299e-04,6.303e-03]
+mu         4.0145e-04  3.892e-04      1.031      0.302 [-3.615e-04,1.164e-03]
                               Volatility Model
 ============================================================================
                  coef    std err          t      P>|t|      95.0\% Conf. Int.
 ----------------------------------------------------------------------------
-omega      1.0467e-03  9.026e-05     11.597  4.292e-31 [8.698e-04,1.224e-03]
-alpha[1]       0.2000  6.151e-02      3.252  1.147e-03   [7.945e-02,  0.321]
+omega      1.9382e-04  6.705e-06     28.905 1.019e-183 [1.807e-04,2.070e-04]
+alpha[1]       0.2000  2.456e-02      8.143  3.842e-16     [  0.152,  0.248]
 ============================================================================
 
 Covariance estimator: robust
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{16}{\boxspacing}
+\prompt{Out}{outcolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
          k       log(L)          AIC          SBC
-LN     2.0  1024.312383  1022.312383  1017.890761
-AR(1)  3.0  1024.614985  1021.614985  1014.982551
-ARCH   3.0  1001.747137   998.747137   992.114703
+LN     2.0  7320.588555  7318.588555  7312.609901
+AR(1)  3.0  7325.165137  7322.165137  7313.197156
+ARCH   3.0  7217.643024  7214.643024  7205.675043
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{garch-ux6a21ux578b}{%
 \subsubsection{GARCH 模型}\label{garch-ux6a21ux578b}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{17}{\boxspacing}
+\prompt{In}{incolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{garch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
 \PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,} \PY{n}{garch}\PY{o}{.}\PY{n}{loglikelihood}
@@ -592,61 +634,66 @@ ARCH   3.0  1001.747137   998.747137   992.114703
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Optimization terminated successfully    (Exit mode 0)
-            Current function value: -1059.9898674281862
+            Current function value: -7557.049208972082
             Iterations: 7
-            Function evaluations: 27
+            Function evaluations: 32
             Gradient evaluations: 3
                      Constant Mean - GARCH Model Results
 ==============================================================================
 Dep. Variable:                 收盘价(元)   R-squared:                       0.000
 Mean Model:             Constant Mean   Adj. R-squared:                  0.000
-Vol Model:                      GARCH   Log-Likelihood:                1059.99
-Distribution:                  Normal   AIC:                          -2111.98
-Method:            Maximum Likelihood   BIC:                          -2094.29
-                                        No. Observations:                  615
-Date:                Tue, Jun 07 2022   Df Residuals:                      614
-Time:                        20:22:31   Df Model:                            1
-                                  Mean Model
-=============================================================================
-                 coef    std err          t      P>|t|       95.0\% Conf. Int.
------------------------------------------------------------------------------
-mu         7.8294e-05  1.628e-03  4.810e-02      0.962 [-3.112e-03,3.269e-03]
+Vol Model:                      GARCH   Log-Likelihood:                7557.05
+Distribution:                  Normal   AIC:                          -15106.1
+Method:            Maximum Likelihood   BIC:                          -15082.2
+                                        No. Observations:                 2918
+Date:                Fri, Jun 10 2022   Df Residuals:                     2917
+Time:                        17:23:25   Df Model:                            1
+                                 Mean Model
+============================================================================
+                 coef    std err          t      P>|t|      95.0\% Conf. Int.
+----------------------------------------------------------------------------
+mu         1.7486e-04  2.550e-06     68.582      0.000 [1.699e-04,1.799e-04]
                               Volatility Model
 ============================================================================
                  coef    std err          t      P>|t|      95.0\% Conf. Int.
 ----------------------------------------------------------------------------
-omega      4.1920e-05  1.661e-05      2.524  1.159e-02 [9.374e-06,7.447e-05]
-alpha[1]       0.1000  2.669e-02      3.747  1.790e-04   [4.769e-02,  0.152]
-beta[1]        0.8800  2.204e-02     39.931      0.000     [  0.837,  0.923]
+omega      7.7533e-06  3.884e-11  1.996e+05      0.000 [7.753e-06,7.753e-06]
+alpha[1]       0.0500  6.240e-03      8.013  1.120e-15 [3.777e-02,6.223e-02]
+beta[1]        0.9300  5.660e-03    164.301      0.000     [  0.919,  0.941]
 ============================================================================
 
 Covariance estimator: robust
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{17}{\boxspacing}
+\prompt{Out}{outcolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
          k       log(L)          AIC          SBC
-LN     2.0  1024.312383  1022.312383  1017.890761
-AR(1)  3.0  1024.614985  1021.614985  1014.982551
-ARCH   3.0  1001.747137   998.747137   992.114703
-GARCH  4.0  1059.989867  1055.989867  1047.146623
+LN     2.0  7320.588555  7318.588555  7312.609901
+AR(1)  3.0  7325.165137  7322.165137  7313.197156
+ARCH   3.0  7217.643024  7214.643024  7205.675043
+GARCH  4.0  7557.049209  7553.049209  7541.091902
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{rsln-2}{%
 \subsubsection{RSLN-2}\label{rsln-2}}
 
-\href{https://www.statsmodels.org/dev/generated/statsmodels.tsa.regime_switching.markov_regression.MarkovRegression.html}{reference}
+RSLN
+模型本质是马尔可夫状态转移模型，因而我们参考\href{https://www.statsmodels.org/dev/generated/statsmodels.tsa.regime_switching.markov_regression.MarkovRegression.html}{statsmodels
+文档}，令两 regime
+分布异方差，回归结果如下表，显示异方差的确存在(不同状态下的方差影响显著)。
+
+同样，我们提取似然函数对数，并计算 \(AIC\)、\(SBC\)
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{18}{\boxspacing}
+\prompt{In}{incolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{rsln} \PY{o}{=} \PY{n}{MarkovRegression}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{switching\PYZus{}variance}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} 异方差}
+\PY{n}{rsln} \PY{o}{=} \PY{n}{MarkovRegression}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{switching\PYZus{}variance}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 异方差}
 \PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{6}\PY{p}{,} \PY{n}{rsln}\PY{o}{.}\PY{n}{llf}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{rsln}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RSLN\PYZhy{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
     \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
@@ -659,31 +706,31 @@ GARCH  4.0  1059.989867  1055.989867  1047.146623
     \begin{Verbatim}[commandchars=\\\{\}]
                         Markov Switching Model Results
 ==============================================================================
-Dep. Variable:                      y   No. Observations:                  615
-Model:               MarkovRegression   Log Likelihood                1052.556
-Date:                Tue, 07 Jun 2022   AIC                          -2093.113
-Time:                        20:22:32   BIC                          -2066.583
-Sample:                             0   HQIC                         -2082.797
-                                - 615
+Dep. Variable:                      y   No. Observations:                 2918
+Model:               MarkovRegression   Log Likelihood                7525.435
+Date:                Fri, 10 Jun 2022   AIC                         -15038.871
+Time:                        17:23:29   BIC                         -15002.999
+Sample:                             0   HQIC                        -15025.949
+                               - 2918
 Covariance Type:               approx
                              Regime 0 parameters
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const          0.0012      0.002      0.587      0.557      -0.003       0.005
-sigma2         0.0012      0.000      5.641      0.000       0.001       0.002
+const          0.0008      0.000      2.180      0.029    7.74e-05       0.001
+sigma2         0.0002   1.09e-05     21.250      0.000       0.000       0.000
                              Regime 1 parameters
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const          0.0021      0.005      0.459      0.646      -0.007       0.011
-sigma2         0.0038      0.001      5.165      0.000       0.002       0.005
+const         -0.0013      0.001     -0.944      0.345      -0.004       0.001
+sigma2         0.0009   8.08e-05     11.696      0.000       0.001       0.001
                          Regime transition parameters
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-p[0->0]        0.9744      0.015     65.976      0.000       0.945       1.003
-p[1->0]        0.0427      0.023      1.837      0.066      -0.003       0.088
+p[0->0]        0.9869      0.004    246.875      0.000       0.979       0.995
+p[1->0]        0.0462      0.013      3.531      0.000       0.021       0.072
 ==============================================================================
 
 Warnings:
@@ -691,56 +738,64 @@ Warnings:
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{18}{\boxspacing}
+\prompt{Out}{outcolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
           k       log(L)          AIC          SBC  LRT
-LN      2.0  1024.312383  1022.312383  1017.890761  NaN
-AR(1)   3.0  1024.614985  1021.614985  1014.982551  NaN
-ARCH    3.0  1001.747137   998.747137   992.114703  NaN
-GARCH   4.0  1059.989867  1055.989867  1047.146623  NaN
-RSLN-2  6.0  1052.556303  1046.556303  1033.291436  NaN
+LN      2.0  7320.588555  7318.588555  7312.609901  NaN
+AR(1)   3.0  7325.165137  7322.165137  7313.197156  NaN
+ARCH    3.0  7217.643024  7214.643024  7205.675043  NaN
+GARCH   4.0  7557.049209  7553.049209  7541.091902  NaN
+RSLN-2  6.0  7525.435364  7519.435364  7501.499403  NaN
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{likelihood-ratio-test}{%
 \subsubsection{Likelihood Ratio Test}\label{likelihood-ratio-test}}
 
+不同似然函数对比采用 \(\chi^2\) 检验，以 lognormal 模型为基准进行 LRT
+检验，结果如下表显示。综合似然函数最大值、\(AIC\)、\(SBC\) 与 \(LRT\)
+检验值，GARCH 模型的似然函数、\(AIC\)、\(SBC\) 最大，且相较于 lognormal
+模型效果提升显著。
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{19}{\boxspacing}
+\prompt{In}{incolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{basemodel} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LN}\PY{l+s+s2}{\PYZdq{}}
 \PY{k}{for} \PY{n}{model} \PY{o+ow}{in} \PY{n}{result}\PY{p}{:}
     \PY{k}{if} \PY{n}{model} \PY{o}{==} \PY{n}{basemodel}\PY{p}{:}
         \PY{k}{continue}
-    \PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LRT}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{chi2}\PY{o}{.}\PY{n}{sf}\PY{p}{(}\PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{result}\PY{p}{[}\PY{n}{basemodel}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{result}\PY{p}{[}\PY{n}{basemodel}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+    \PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LRT}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{chi2}\PY{o}{.}\PY{n}{sf}\PY{p}{(}
+        \PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{result}\PY{p}{[}\PY{n}{basemodel}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+        \PY{n}{result}\PY{p}{[}\PY{n}{model}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{result}\PY{p}{[}\PY{n}{basemodel}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+    \PY{p}{)}
 \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{19}{\boxspacing}
+\prompt{Out}{outcolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
           k       log(L)          AIC          SBC           LRT
-LN      2.0  1024.312383  1022.312383  1017.890761           NaN
-AR(1)   3.0  1024.614985  1021.614985  1014.982551  5.822561e-01
-ARCH    3.0  1001.747137   998.747137   992.114703  1.000000e+00
-GARCH   4.0  1059.989867  1055.989867  1047.146623  1.789504e-08
-RSLN-2  6.0  1052.556303  1046.556303  1033.291436  1.113061e-05
+LN      2.0  7320.588555  7318.588555  7312.609901           NaN
+AR(1)   3.0  7325.165137  7322.165137  7313.197156  3.241181e-02
+ARCH    3.0  7217.643024  7214.643024  7205.675043  1.000000e+00
+GARCH   4.0  7557.049209  7553.049209  7541.091902  4.500092e-52
+RSLN-2  6.0  7525.435364  7519.435364  7501.499403  3.409568e-43
 \end{Verbatim}
 \end{tcolorbox}
-        
+
     \hypertarget{ux7b2cux4e8cux9898}{%
 \subsection{第二题}\label{ux7b2cux4e8cux9898}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{20}{\boxspacing}
+\prompt{In}{incolor}{8}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
 \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{42}\PY{p}{)}
 \PY{n}{cases} \PY{o}{=} \PY{l+m+mi}{10000}
 \PY{k}{for} \PY{n}{case} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{cases}\PY{p}{)}\PY{p}{:}
     \PY{k}{if} \PY{p}{(}\PY{n}{case}\PY{o}{*}\PY{l+m+mi}{10}\PY{p}{)} \PY{o}{\PYZpc{}} \PY{n}{cases} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
-        \PY{n+nb}{print}\PY{p}{(}\PY{n}{case}\PY{o}{/}\PY{n}{cases}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{simulating}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{case}\PY{o}{/}\PY{n}{cases}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
     \PY{n}{sim\PYZus{}model} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{k+kc}{None}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
     \PY{n}{simulation} \PY{o}{=} \PY{n}{sim\PYZus{}model}\PY{o}{.}\PY{n}{simulate}\PY{p}{(}\PY{n}{garch}\PY{o}{.}\PY{n}{params}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}
     \PY{n}{monte\PYZus{}carlo}\PY{p}{[}\PY{n}{case}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{prod}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{simulation}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
@@ -748,20 +803,20 @@ RSLN-2  6.0  1052.556303  1046.556303  1033.291436  1.113061e-05
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-0.0 \%
-10.0 \%
-20.0 \%
-30.0 \%
-40.0 \%
-50.0 \%
-60.0 \%
-70.0 \%
-80.0 \%
-90.0 \%
+simulating 0.0 \%
+simulating 10.0 \%
+simulating 20.0 \%
+simulating 30.0 \%
+simulating 40.0 \%
+simulating 50.0 \%
+simulating 60.0 \%
+simulating 70.0 \%
+simulating 80.0 \%
+simulating 90.0 \%
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{21}{\boxspacing}
+\prompt{In}{incolor}{9}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}
 \PY{n}{var} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{)}
@@ -771,18 +826,21 @@ RSLN-2  6.0  1052.556303  1046.556303  1033.291436  1.113061e-05
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{21}{\boxspacing}
+\prompt{Out}{outcolor}{9}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
             es       var
-0.01  0.593268 -0.506315
-0.05  0.442022 -0.338880
-0.10  0.369633 -0.264606
+0.01  0.261601 -0.220517
+0.05  0.195406 -0.151704
+0.10  0.164605 -0.117988
 \end{Verbatim}
 \end{tcolorbox}
-        
+
+    \bibliographystyle{plain}
+\bibliography{ref}
+
 
     % Add a bibliography block to the postdoc
-    
-    
-    
+
+
+
 \end{document}
