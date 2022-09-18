@@ -2,3 +2,10 @@
 *.txt
 *.log
 *.docx
+*.aux
+*.fdb_latexmk
+*.fls
+*.out
+*.gz
+*.xdv
+*.png

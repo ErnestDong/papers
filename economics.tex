@@ -1,0 +1,149 @@
+% !TeX root = economics.tex
+\documentclass[a4paper,12pt]{article}
+\usepackage{xeCJK}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage[scale=0.8]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage[hidelinks]{hyperref}
+\title{经济学综合第一次作业}
+\author{董晨阳 2201211201}
+\begin{document}
+\maketitle
+\section{7.E.1}
+\subsection{a}
+
+选手1有三个信息集，其策略可以是
+\begin{eqnarray}
+    S_1=\{&\nonumber\\
+    &(L,x,x),(L,x,y),(L,y,x),(L,y,y)\nonumber\\
+    &(M,x,x),(M,x,y),(M,y,x),(M,y,y)\nonumber\\
+    &(R,x,x),(R,x,y),(R,y,x),(R,y,y)\nonumber\\
+    \}&
+    \label{eq:1a1}
+\end{eqnarray}
+
+式\ref{eq:1a1}中的元素$(a_1,a_2,a_3)$含义为在最顶端信息集采用策略$a_1$，左下信息集策略为$a_2$，右下信息集合策略为$a_3$
+
+选手2只有一个信息集，因此其策略是
+\begin{equation}
+    S_2=\{ (l),(r) \}
+\end{equation}
+
+\subsection{b}\label{sec:1.2}
+
+记选手2选取l、r的策略概率分别为$q_1,q_2$，选手1任意给定的行为策略为：
+\begin{enumerate}
+    \item 在最顶端信息集选取L、M、R三种策略的概率为$p_{11},p_{12},p_{13}$，
+    \item 左下信息集选取x、y的策略概率分别为$p_{21},p_{22}$，
+    \item 右下信息集选取x、y的策略概率分别为$p_{31},p_{32}$；
+\end{enumerate}
+其中 $\sum_j p_{ij}=1,\forall i\in\{ 1,2,3 \}$
+
+则选手1的行为策略终止节点的分布如表\ref{tab:1b1}所示。
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccccc}
+          & $T_0$             & $T_1$             & $T_2$             & $T_3$             & $T_4$             \\\hline
+        P & $p_{11}$          & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$ \\\hline
+          & $T_5$             & $T_6$             & $T_7$             & $T_8$             &                   \\\hline
+        P & $p_{12}q_1p_{31}$ & $p_{12}q_1p_{32}$ & $p_{12}q_2p_{31}$ & $p_{12}q_2p_{32}$ &                   \\\hline
+    \end{tabular}
+    \caption{终止节点的分布}\label{tab:1b1}
+\end{table}
+
+表\ref{tab:1b1}的结果与公式\ref{eq:1b}中的混合策略一致
+\begin{equation}
+    \begin{cases}
+        (L,x,x) & P=p_{11}       \\
+        (M,x,x) & P=p_{12}p_{21} \\
+        (M,y,x) & P=p_{12}p_{22} \\
+        (R,x,x) & P=p_{13}p_{31} \\
+        (R,x,y) & P=p_{13}p_{32}
+    \end{cases}
+    \label{eq:1b}
+\end{equation}
+
+\subsection{c}
+
+对于选手1的混合策略，记式\ref{eq:1a1}中策略的概率分别为$p_i,i\in \{ 0,1,\dots,12 \}$，
+选手2依然如\ref{sec:1.2}中所示表示，则终止节点的分布为：
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccccc}
+          & $T_0$             & $T_1$                & $T_2$             & $T_3$                & $T_4$          \\ \hline
+        P & $\sum_1^4p_i$     & $(p_5+p_6)q_1$       & $(p_7+p_8)q_1$    & $(p_5+p_6)q_2$       & $(p_7+p_8)q_2$ \\ \hline
+          & $T_5$             & $T_6$                & $T_7$             & $T_8$                &                \\\hline
+        P & $(p_9+p_{10})q_1$ & $(p_{11}+p_{12})q_1$ & $(p_9+p_{10})q_2$ & $(p_{11}+p_{12})q_2$ &                \\\hline
+    \end{tabular}
+    \caption{终止节点的分布}\label{tab:1b2}
+\end{table}
+
+等价于：
+\begin{enumerate}
+    \item 在最顶端信息集选取L、M、R三种策略的概率为$\sum_1^4p_i,\sum_5^8p_i,\sum_9^{12}p_i$，
+    \item 左下信息集选取x、y的策略概率分别为$(p_5+p_6)/\sum_{5}^{8}p_i,(p_7+p_8)/\sum_{5}^{8}p_i$，
+    \item 右下信息集选取x、y的策略概率分别为$(p_9+p_{10})/\sum_{9}^{12}p_i,(p_{11}+p_{12})/\sum_{9}^{12}p_i$
+\end{enumerate}
+
+\subsection{d}
+
+选手1在第二次决策时，没有了第一次决策选择的是M还是R的记忆，因而不再是完美记忆博弈。
+
+\ref{sec:1.2}中的结论依然成立。记第二次决策l、r的策略概率分别为 $p_{21},p_{22}$，终止节点的概率分布为
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccccc}
+          & $T_0$             & $T_1$             & $T_2$             & $T_3$             & $T_4$             \\\hline
+        P & $p_{11}$          & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$ \\\hline
+          & $T_5$             & $T_6$             & $T_7$             & $T_8$                                 \\\hline
+        P & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$                     \\\hline
+    \end{tabular}
+    \caption{终止节点的分布}
+\end{table}
+
+等价于
+\begin{equation}
+    \begin{cases}
+        (L,x) & P=p_{11}       \\
+        (M,x) & P=p_{12}p_{21} \\
+        (M,y) & P=p_{12}p_{22} \\
+        (R,x) & P=p_{13}p_{21} \\
+        (R,y) & P=p_{13}p_{22}
+    \end{cases}
+\end{equation}
+
+\section{8.B.5}
+
+\subsection{a}\label{sec:2a}
+
+假设选手j生产$q_j$，选手i的最优反应是
+$$\max (a-b(q_i+q_j)-c)q_i$$
+F.O.C.
+$$a-b(2q_i+q_j)-c=0$$
+即$q_i=\frac{a-c}{2b}-\frac{q_j}{2}$
+
+当$q_1\ge 0$时，最优反应$q_2\le\frac{a-c}{2b}$；
+因而此时 $q_1\ge \frac{a-c}{4b}$，继续推判断依据链可以得到$q_2 \le \frac{3(a-c)}{8b}$。
+最终可以得到$q_1=q_2=\frac{a-c}{3b}$，博弈达到唯一结果
+
+\subsection{b}
+
+加入新的选手k，\ref{sec:2a}中的最优反应变为
+$$\max (a-b(q_i+q_j+q_k)-c)q_i$$
+F.O.C.
+$$a-b(2q_i+q_j+q_k)-c=0$$
+
+由于$q_2,q_3\ge 0$，最优反应$q_1\le\frac{a-c}{2b}$，同理$q_3\le\frac{a-c}{2b}$，
+继续推判断依据链可以得到此时$q_2\ge 0$，无法进一步推断，因此无法达到唯一的均衡结果。
+
+\section{8.C.2}
+
+记选手i重复删除N轮之后的最优反应策略集为$\Sigma_i^N$。
+假设 $s_i$不是$\Sigma_{-i}^N$中任何一个策略的最优反应，并且$s_i$不会在N+1轮删除。
+在第 $N+1$轮，$s_i$也不是$\Sigma_{-1}^{N+1}\subseteq \Sigma_{-i}^N$的最优反应，因而在下一轮一定会被删掉。
+
+\end{document}
