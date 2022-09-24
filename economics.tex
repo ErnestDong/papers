@@ -1,149 +1,148 @@
 % !TeX root = economics.tex
-\documentclass[a4paper,12pt]{article}
-\usepackage{xeCJK}
+\documentclass[a4paper,12pt]{ctexart}
+% \usepackage{xeCJK}
 \usepackage{indentfirst}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{float}
+\usepackage{enumerate}
+\usepackage{diagbox}
 \usepackage[scale=0.8]{geometry}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
 \usepackage[hidelinks]{hyperref}
 \title{经济学综合第一次作业}
 \author{董晨阳 2201211201}
 \begin{document}
 \maketitle
-\section{7.E.1}
-\subsection{a}
+\section{8.D.2}
 
-选手1有三个信息集，其策略可以是
-\begin{eqnarray}
-    S_1=\{&\nonumber\\
-    &(L,x,x),(L,x,y),(L,y,x),(L,y,y)\nonumber\\
-    &(M,x,x),(M,x,y),(M,y,x),(M,y,y)\nonumber\\
-    &(R,x,x),(R,x,y),(R,y,x),(R,y,y)\nonumber\\
-    \}&
-    \label{eq:1a1}
-\end{eqnarray}
-
-式\ref{eq:1a1}中的元素$(a_1,a_2,a_3)$含义为在最顶端信息集采用策略$a_1$，左下信息集策略为$a_2$，右下信息集合策略为$a_3$
-
-选手2只有一个信息集，因此其策略是
+假定存在一个混合策略纳什均衡$(s_1^*,s_2^*,\dots,s_n^*)$，其中 $i$ 的策略被重复删除严格劣势策略第 $k$ 轮所删除。则
 \begin{equation}
-    S_2=\{ (l),(r) \}
+    \forall s_{-i}\in S_{-i}^{k-1},\exists \sigma_i,a_i\in S_i^{k-1}, \mu_i(\sigma_i,s_{-i})>\mu_i(a_i,s_{-i})
+\end{equation}
+其中策略 $a_i$ 为以正概率$s_i^*(a_i)$ 被选取的某个纯策略。
+
+又由于$s_{-i}\in S_{-i}^{k-1}$，因此$\mu_i(\sigma_i,s^*_{-i})>\mu_i(a_i,s^*_{-i})$，令$s'$为用$s^*(a)$概率选$\sigma_i$替换$a_i$
+从而
+\begin{equation}
+    \mu(s'_i,s_{-i}^*)=\mu(s_i^*,s^*_{-i})+s^*_i(a_i)(\mu(\sigma_i,s_{-i}^*)-\mu(a_i,s_{-i}^*))>\mu(s_i^*,s_{-i}^*)
 \end{equation}
 
-\subsection{b}\label{sec:1.2}
+与$(s_1^*,s_2^*,\dots,s_n^*)$是纳什均衡矛盾，因而纳什均衡一定会在重复删除严格劣势策略后幸存。
 
-记选手2选取l、r的策略概率分别为$q_1,q_2$，选手1任意给定的行为策略为：
+又因为只留下一个策略组合，根据纳什均衡的存在性，该策略组合一定是一个纳什均衡
+
+\section{8.D.4}
+
+\subsection{a}
+
+假定一个参与人报价大于100，则另一个参与人的任何策略在收益上是等价的，因此不存在一个严格劣势策略
+
+\subsection{b}
+
 \begin{enumerate}
-    \item 在最顶端信息集选取L、M、R三种策略的概率为$p_{11},p_{12},p_{13}$，
-    \item 左下信息集选取x、y的策略概率分别为$p_{21},p_{22}$，
-    \item 右下信息集选取x、y的策略概率分别为$p_{31},p_{32}$；
+    \item 当参与人i报价大于100时，参与人j的任何策略在收益上都是等价的。
+    \item 当参与人 i 报价 $i\in[0,100]$时，参与人j会报价$100-i\le 100$，大于100的策略下收益均小于0。
 \end{enumerate}
-其中 $\sum_j p_{ij}=1,\forall i\in\{ 1,2,3 \}$
 
-则选手1的行为策略终止节点的分布如表\ref{tab:1b1}所示。
-\begin{table}[H]
-    \centering
-    \begin{tabular}{cccccccccc}
-          & $T_0$             & $T_1$             & $T_2$             & $T_3$             & $T_4$             \\\hline
-        P & $p_{11}$          & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$ \\\hline
-          & $T_5$             & $T_6$             & $T_7$             & $T_8$             &                   \\\hline
-        P & $p_{12}q_1p_{31}$ & $p_{12}q_1p_{32}$ & $p_{12}q_2p_{31}$ & $p_{12}q_2p_{32}$ &                   \\\hline
-    \end{tabular}
-    \caption{终止节点的分布}\label{tab:1b1}
-\end{table}
+因此当，报价大于100美元的策略都是弱劣势的。
 
-表\ref{tab:1b1}的结果与公式\ref{eq:1b}中的混合策略一致
+\subsection{c}
+
+纳什均衡为 $(i,100-i),\forall i\in[0,100]$。因为当参与人i报价为$i$时，
+\begin{enumerate}
+    \item 如果参与人j报价$j=100-i$，则二人的收益可以满足
+    \item 如果参与人j报价$j>100-i$，则$i+j>100$，二人得到的支付为0
+    \item 如果参与人j报价$j<100-i$，则二人的收益可以满足，但是少于第一种情形下的支付
+\end{enumerate}
+
+\section{8.D.7}
+
+\subsection{a}
+
+假设$\underline{w}_i=u_i(\sigma_i^*,\sigma_{-i}^*)$，则
+\begin{eqnarray}
+    \underline{v}_i&=&\min_{\sigma_{-i}}\max_{\sigma_i} \mu_i(\sigma_i,\sigma_{-i})\nonumber\\
+    &\ge& \min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\nonumber\\
+    &=& \mu_i(\sigma_i,\sigma_{-i})\nonumber\\
+    &=& \underline{w}_i \label{eq0}
+\end{eqnarray}
+
+\subsection{b}
+
+假设$(\sigma_i^*,\sigma_{-i}^*)$是零混合策略纳什均衡，那么有
+\begin{eqnarray}
+    \mu_i(\sigma_i^*,\sigma_{-i}^*)&=&\max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)\\
+    \mu_{-i}(\sigma_i^*,\sigma_{-i}^*)&=&\max_{\sigma_{-i}}\mu_{-i}(\sigma_i^*,\sigma_{-i})\label{eq1}
+\end{eqnarray}
+由于是零和博弈，$\mu_i(\sigma_i^*,\sigma_{-i}^*)=-\mu_{-i}(\sigma_i^*,\sigma_{-i}^*)$，(\ref{eq1})式可以改写为
 \begin{equation}
-    \begin{cases}
-        (L,x,x) & P=p_{11}       \\
-        (M,x,x) & P=p_{12}p_{21} \\
-        (M,y,x) & P=p_{12}p_{22} \\
-        (R,x,x) & P=p_{13}p_{31} \\
-        (R,x,y) & P=p_{13}p_{32}
-    \end{cases}
-    \label{eq:1b}
+    -\mu_i(\sigma_i^*,\sigma_{-i}^*)=\max_{\sigma_{-i}}(-\mu_i(\sigma_i^*,\sigma_{-i}))=-\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})
+\end{equation}
+从而有
+\begin{equation}
+    \max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)=\mu_i(\sigma_i^*,\sigma_{-i}^*)=\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\label{eq_2}
+\end{equation}
+进一步，(\ref{eq_2})式左侧套$\displaystyle \min_{\sigma_{-i}}$有
+\begin{equation}
+    \underline{v}_i=\min_{\sigma_{-i}}\max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i})\le \max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)=\mu_i(\sigma_i^*,\sigma_{-i}^*)\label{eq_3}
+\end{equation}
+(\ref{eq_2})式右侧套$\displaystyle \max_{\sigma_i}$有
+\begin{equation}
+    \underline{w}_i=\max_{\sigma_i}\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\ge \mu_i(\sigma_i^*,\sigma_{-i}^*)\label{eq_4}
+\end{equation}
+(\ref{eq_3})(\ref{eq_4})两式联立得
+\begin{equation}
+    \underline{v}_i\le\underline{w}_i
+\end{equation}
+结合(\ref{eq0})可知
+\begin{equation}
+    \underline{v}_i=\underline{w}_i=\mu_i^*\label{eq:res}
 \end{equation}
 
 \subsection{c}
 
-对于选手1的混合策略，记式\ref{eq:1a1}中策略的概率分别为$p_i,i\in \{ 0,1,\dots,12 \}$，
-选手2依然如\ref{sec:1.2}中所示表示，则终止节点的分布为：
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{cccccccccc}
-          & $T_0$             & $T_1$                & $T_2$             & $T_3$                & $T_4$          \\ \hline
-        P & $\sum_1^4p_i$     & $(p_5+p_6)q_1$       & $(p_7+p_8)q_1$    & $(p_5+p_6)q_2$       & $(p_7+p_8)q_2$ \\ \hline
-          & $T_5$             & $T_6$                & $T_7$             & $T_8$                &                \\\hline
-        P & $(p_9+p_{10})q_1$ & $(p_{11}+p_{12})q_1$ & $(p_9+p_{10})q_2$ & $(p_{11}+p_{12})q_2$ &                \\\hline
-    \end{tabular}
-    \caption{终止节点的分布}\label{tab:1b2}
-\end{table}
-
-等价于：
-\begin{enumerate}
-    \item 在最顶端信息集选取L、M、R三种策略的概率为$\sum_1^4p_i,\sum_5^8p_i,\sum_9^{12}p_i$，
-    \item 左下信息集选取x、y的策略概率分别为$(p_5+p_6)/\sum_{5}^{8}p_i,(p_7+p_8)/\sum_{5}^{8}p_i$，
-    \item 右下信息集选取x、y的策略概率分别为$(p_9+p_{10})/\sum_{9}^{12}p_i,(p_{11}+p_{12})/\sum_{9}^{12}p_i$
-\end{enumerate}
-
-\subsection{d}
-
-选手1在第二次决策时，没有了第一次决策选择的是M还是R的记忆，因而不再是完美记忆博弈。
-
-\ref{sec:1.2}中的结论依然成立。记第二次决策l、r的策略概率分别为 $p_{21},p_{22}$，终止节点的概率分布为
-\begin{table}[H]
-    \centering
-    \begin{tabular}{cccccccccc}
-          & $T_0$             & $T_1$             & $T_2$             & $T_3$             & $T_4$             \\\hline
-        P & $p_{11}$          & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$ \\\hline
-          & $T_5$             & $T_6$             & $T_7$             & $T_8$                                 \\\hline
-        P & $p_{12}q_1p_{21}$ & $p_{12}q_1p_{22}$ & $p_{12}q_2p_{21}$ & $p_{12}q_2p_{22}$                     \\\hline
-    \end{tabular}
-    \caption{终止节点的分布}
-\end{table}
-
-等价于
+根据纳什均衡和零和的性质有
+\begin{eqnarray}
+    \mu_i(\sigma_i',\sigma_{-i}') \ge\mu_i(\sigma_i'',\sigma_{-i}') =-\mu_{-i}(\sigma_i'',\sigma_{-i}') \ge-\mu_{-i}(\sigma_i'',\sigma_{-i}'') = \mu_i(\sigma_i'',\sigma_{-i} '') \\
+    \mu_i(\sigma_i',\sigma_{-i}') =\mu_{-i}(\sigma_i',\sigma_{-i}') \le-\mu_{-i}(\sigma_i',\sigma_{-i}'') =\mu_{i}(\sigma_i',\sigma_{-i}'') \le \mu_i(\sigma_i'',\sigma_{-i} '')
+\end{eqnarray}
+结合式(\ref{eq:res})可得
 \begin{equation}
-    \begin{cases}
-        (L,x) & P=p_{11}       \\
-        (M,x) & P=p_{12}p_{21} \\
-        (M,y) & P=p_{12}p_{22} \\
-        (R,x) & P=p_{13}p_{21} \\
-        (R,y) & P=p_{13}p_{22}
-    \end{cases}
+    \underline{v}_i=\mu_i(\sigma_i'',\sigma_{-i}'')\ge\mu_i(\sigma_i',\sigma_{-i}'')\ge\mu_i(\sigma_i',\sigma_{-i}')\ge\mu_i(\sigma_i'',\sigma_{-i}')\ge\mu_i(\sigma_i'',\sigma_{-i}'')\ge \underline{v}_i
 \end{equation}
+因此
+\begin{equation}
+    \underline{v}_i=\mu_i(\sigma_i'',\sigma_{-i}'')=\mu_i(\sigma_i',\sigma_{-i}'')=\mu_i(\sigma_i',\sigma_{-i}')=\mu_i(\sigma_i'',\sigma_{-i}')
+\end{equation}
+由于$(\sigma_i',\sigma_{-i}')$是一个纳什均衡，因此$\forall \sigma_i,\mu_i(\sigma_i,\sigma_{-i}')\le\mu_i(\sigma_i',\sigma_{-i}')=\mu_i(\sigma_i'',\sigma_{-i}')$，因此$(\sigma_i'',\sigma_{-i}')$也是一个纳什均衡；同理$(\sigma_i',\sigma_{-i}'')$也是一个纳什均衡
+\section{8.E.1}
+\begin{enumerate}
+    \item AA：不管强弱类型都攻击
+    \item AN：强类型则攻击，弱类型则不攻击
+    \item NA：强类型则不攻击，弱类型则攻击
+    \item NN：不管强弱类型都不攻击
+\end{enumerate}
+payoff 如表\ref{pic:payoff}所示
 
-\section{8.B.5}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \diagbox{军队2}{军队1} & AA                                                                  & AN                                                                & NA                                                      & NN                            \\\hline
+        AA                 & $\displaystyle \frac{M}{4}-\frac{s+w}{2},\frac{M}{4}-\frac{s+w}{2}$ & $\displaystyle \frac{M}{2}-\frac{s+w}{4},\frac{M}{4}-\frac{s}{2}$ & $\displaystyle \frac{3M}{4}-\frac{s+w}{4},-\frac{w}{2}$ & $\displaystyle M,0$           \\\hline
+        AN                 & $\displaystyle \frac{M}{4}-\frac{s}{2},\frac{M}{2}-\frac{s+w}{4}$   & $\displaystyle \frac{M-s}{4},\frac{M-s}{4}$                       & $\displaystyle \frac{M}{2}-\frac{s}{4},\frac{M-w}{4}$   & $\displaystyle \frac{M}{2},0$ \\\hline
+        NA                 & $\displaystyle -\frac{w}{2},\frac{3M}{4}-\frac{s+w}{4}$             & $\displaystyle \frac{M-w}{4},\frac{M}{2}-\frac{s}{4}$             & $\displaystyle \frac{M-w}{4},\frac{M-w}{4}$             & $\displaystyle \frac{M}{2},0$ \\\hline
+        NN                 & $\displaystyle 0,M$                                                 & $\displaystyle 0,\frac{M}{2}$                                     & $\displaystyle 0,\frac{M}{2}$                           & $\displaystyle 0,0$           \\\hline
+    \end{tabular}
+    \caption{策略组合的期望收益}
+    \label{pic:payoff}
+\end{table}
+这个标准形式博弈的任何纳什均衡都是原博弈的一个贝叶斯纳什均衡。
 
-\subsection{a}\label{sec:2a}
-
-假设选手j生产$q_j$，选手i的最优反应是
-$$\max (a-b(q_i+q_j)-c)q_i$$
-F.O.C.
-$$a-b(2q_i+q_j)-c=0$$
-即$q_i=\frac{a-c}{2b}-\frac{q_j}{2}$
-
-当$q_1\ge 0$时，最优反应$q_2\le\frac{a-c}{2b}$；
-因而此时 $q_1\ge \frac{a-c}{4b}$，继续推判断依据链可以得到$q_2 \le \frac{3(a-c)}{8b}$。
-最终可以得到$q_1=q_2=\frac{a-c}{3b}$，博弈达到唯一结果
-
-\subsection{b}
-
-加入新的选手k，\ref{sec:2a}中的最优反应变为
-$$\max (a-b(q_i+q_j+q_k)-c)q_i$$
-F.O.C.
-$$a-b(2q_i+q_j+q_k)-c=0$$
-
-由于$q_2,q_3\ge 0$，最优反应$q_1\le\frac{a-c}{2b}$，同理$q_3\le\frac{a-c}{2b}$，
-继续推判断依据链可以得到此时$q_2\ge 0$，无法进一步推断，因此无法达到唯一的均衡结果。
-
-\section{8.C.2}
-
-记选手i重复删除N轮之后的最优反应策略集为$\Sigma_i^N$。
-假设 $s_i$不是$\Sigma_{-i}^N$中任何一个策略的最优反应，并且$s_i$不会在N+1轮删除。
-在第 $N+1$轮，$s_i$也不是$\Sigma_{-1}^{N+1}\subseteq \Sigma_{-i}^N$的最优反应，因而在下一轮一定会被删掉。
-
+\begin{enumerate}
+    \item 情形1:$M>w>s,w>\frac{M}{2}>s$，从上面的矩阵可以看到$(AA,AN)$和$(AN,AA)$是纯策略贝叶斯纳什均衡。
+    \item 情形2:$M>w>s,\frac{M}{2}<s$，从上面的矩阵可以看到$(AA,NN)$和$(NN,AA)$是纯策略贝叶斯纳什均衡。
+    \item 情形3:$w>M>s,\frac{M}{2}<s$，从上面的矩阵可以看到$(AA,NN)$，$(NN,AA)$和$(AN,AN)$是纯策略贝叶斯纳什均衡。
+    \item 情形4:$w>M>s,\frac{M}{2}>s$，从上面的矩阵可以看到$(AA,AN)$，$(AN,AA)$和$(AN,AN)$F是纯策略贝叶斯纳什均衡。
+\end{enumerate}
 \end{document}
