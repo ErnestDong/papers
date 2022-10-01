@@ -7,142 +7,138 @@
 \usepackage{float}
 \usepackage{enumerate}
 \usepackage{diagbox}
+\usepackage{graphicx}
+\usepackage{tikz}
+% https://www.sfu.ca/~haiyunc/notes/Game_Trees_with_TikZ.pdf
+\usetikzlibrary{calc}
 \usepackage[scale=0.8]{geometry}
 \usepackage[hidelinks]{hyperref}
-\title{经济学综合第一次作业}
+\title{经济学综合第三次作业}
 \author{董晨阳 2201211201}
 \begin{document}
 \maketitle
-\section{8.D.2}
-
-假定存在一个混合策略纳什均衡$(s_1^*,s_2^*,\dots,s_n^*)$，其中 $i$ 的策略被重复删除严格劣势策略第 $k$ 轮所删除。则
-\begin{equation}
-    \forall s_{-i}\in S_{-i}^{k-1},\exists \sigma_i,a_i\in S_i^{k-1}, \mu_i(\sigma_i,s_{-i})>\mu_i(a_i,s_{-i})
-\end{equation}
-其中策略 $a_i$ 为以正概率$s_i^*(a_i)$ 被选取的某个纯策略。
-
-又由于$s_{-i}\in S_{-i}^{k-1}$，因此$\mu_i(\sigma_i,s^*_{-i})>\mu_i(a_i,s^*_{-i})$，令$s'$为用$s^*(a)$概率选$\sigma_i$替换$a_i$
-从而
-\begin{equation}
-    \mu(s'_i,s_{-i}^*)=\mu(s_i^*,s^*_{-i})+s^*_i(a_i)(\mu(\sigma_i,s_{-i}^*)-\mu(a_i,s_{-i}^*))>\mu(s_i^*,s_{-i}^*)
-\end{equation}
-
-与$(s_1^*,s_2^*,\dots,s_n^*)$是纳什均衡矛盾，因而纳什均衡一定会在重复删除严格劣势策略后幸存。
-
-又因为只留下一个策略组合，根据纳什均衡的存在性，该策略组合一定是一个纳什均衡
-
-\section{8.D.4}
-
-\subsection{a}
-
-假定一个参与人报价大于100，则另一个参与人的任何策略在收益上是等价的，因此不存在一个严格劣势策略
-
-\subsection{b}
-
+\section*{9.B.3}
+令选手1的纯策略为$s_1\in \{ L,R \}$，选手2的策略为$s_2\{ a,b \}$，选手三策略$s_3\in \{ x,y,z \}$，其中$x,y,z$分别是选手1选择$L$的信息集、选手1选择$R$选手2选择$a$的信息集、选手1选择$R$选手2选择$b$的信息集。
+在这个例子中，纯策略子博弈完美纳什均衡为$(R,a，(r,r,l))$，这个策略是纳什均衡，逐个验证可知：
 \begin{enumerate}
-    \item 当参与人i报价大于100时，参与人j的任何策略在收益上都是等价的。
-    \item 当参与人 i 报价 $i\in[0,100]$时，参与人j会报价$100-i\le 100$，大于100的策略下收益均小于0。
+    \item 如果选手1选择$s_1=L$则选手1的支付为$-1<5$
+    \item 如果选手2选择$s_2=b$则选手2的支付为$-1<4$
+    \item 如果选手3选择$s_3=\{ x,r,z \}$则选手3的支付为$2<4$
 \end{enumerate}
 
-因此当，报价大于100美元的策略都是弱劣势的。
-
-\subsection{c}
-
-纳什均衡为 $(i,100-i),\forall i\in[0,100]$。因为当参与人i报价为$i$时，
+博弈一共有四个纯策略纳什均衡，分别为$(s_1,s_2,s_3)=(R,a,(x,r,z)),\{ x,y \}\subseteq \{ r,l \} $，产生了相同的结果。
+但是仅有$(R,a，(r,r,l))$满足序贯理性，其他三个结果中选手3的行动在某个节点非理性，逐个验证可知：
 \begin{enumerate}
-    \item 如果参与人j报价$j=100-i$，则二人的收益可以满足
-    \item 如果参与人j报价$j>100-i$，则$i+j>100$，二人得到的支付为0
-    \item 如果参与人j报价$j<100-i$，则二人的收益可以满足，但是少于第一种情形下的支付
+    \item 若$s_3=(l,r,z)$，即当选手1选择$L$时选手3选择$l$，此时若选择$r$得到的支付更高，不满足序贯理性
+    \item 若$s_3=(r,r,r)$，即当选手1选择$R$选手2选择$b$时选手3选择$r$，此时若选择$l$得到的支付更高，不满足序贯理性
 \end{enumerate}
 
-\section{8.D.7}
+\section*{9.B.5}
+\subsection*{(a)}\label{subsec:a}
+每个选手有$m_i$个纯策略；
+如果允许混合策略，选手i的策略为$$\Sigma_i=\{ (p_1,\dots,p_{m_i} )\in \mathbb{R}_{+}^{m_i}:p_k\ge0,\forall k|\sum_{k=1}^{m_i}p_k=1 \}$$
 
-\subsection{a}
+\subsection*{(b)}
+选手1行动仍然有$m_1$个纯策略，但选手2可以根据选手1的行动相机抉择，因此有$m_2^{m_1}$个纯策略
 
-假设$\underline{w}_i=u_i(\sigma_i^*,\sigma_{-i}^*)$，则
-\begin{eqnarray}
-    \underline{v}_i&=&\min_{\sigma_{-i}}\max_{\sigma_i} \mu_i(\sigma_i,\sigma_{-i})\nonumber\\
-    &\ge& \min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\nonumber\\
-    &=& \mu_i(\sigma_i,\sigma_{-i})\nonumber\\
-    &=& \underline{w}_i \label{eq0}
-\end{eqnarray}
+\subsection*{(c)}
+假设对于$\forall (m_1,m_2)(m_1',m_2'),\phi_i(m_1,m_2)\neq \phi_i(m_1',m_2')$，那么选手2在每个节点上支付都不一样，因此每个节点上有唯一的最优反应。
+通过逆向归纳，并且选手1也缺乏无差异性，因此选手1对选手2的子博弈也存在唯一的最优反应，与存在多个子博弈完美纳什均衡矛盾。因此$\exists  (m_1,m_2)(m_1',m_2'),\phi_i(m_1,m_2)= \phi_i(m_1',m_2')$
 
-\subsection{b}
+\subsection*{(d)}
+令$(m_1^*,m_2^*)$为\nameref{subsec:a}中的纳什均衡，选手1的支付为$\pi_1$。
+那么选手1选择$m_1^*$，选手2无论如何都选择$m_{2}^*$是一个纳什均衡但不是一个子博弈完美纳什均衡。
+SPNE一定有如果选手1选择$m_1^*$那么选手2选择$m_2^*$，因此选手1的选$m_{1}^*$后可以获得$\pi_1$，而如果存在其他子博弈可以得到更多，则选手一的支付一定不小于$\pi_1$
 
-假设$(\sigma_i^*,\sigma_{-i}^*)$是零混合策略纳什均衡，那么有
-\begin{eqnarray}
-    \mu_i(\sigma_i^*,\sigma_{-i}^*)&=&\max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)\\
-    \mu_{-i}(\sigma_i^*,\sigma_{-i}^*)&=&\max_{\sigma_{-i}}\mu_{-i}(\sigma_i^*,\sigma_{-i})\label{eq1}
-\end{eqnarray}
-由于是零和博弈，$\mu_i(\sigma_i^*,\sigma_{-i}^*)=-\mu_{-i}(\sigma_i^*,\sigma_{-i}^*)$，(\ref{eq1})式可以改写为
-\begin{equation}
-    -\mu_i(\sigma_i^*,\sigma_{-i}^*)=\max_{\sigma_{-i}}(-\mu_i(\sigma_i^*,\sigma_{-i}))=-\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})
-\end{equation}
-从而有
-\begin{equation}
-    \max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)=\mu_i(\sigma_i^*,\sigma_{-i}^*)=\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\label{eq_2}
-\end{equation}
-进一步，(\ref{eq_2})式左侧套$\displaystyle \min_{\sigma_{-i}}$有
-\begin{equation}
-    \underline{v}_i=\min_{\sigma_{-i}}\max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i})\le \max_{\sigma_i}\mu_i(\sigma_i,\sigma_{-i}^*)=\mu_i(\sigma_i^*,\sigma_{-i}^*)\label{eq_3}
-\end{equation}
-(\ref{eq_2})式右侧套$\displaystyle \max_{\sigma_i}$有
-\begin{equation}
-    \underline{w}_i=\max_{\sigma_i}\min_{\sigma_{-i}}\mu_i(\sigma_i^*,\sigma_{-i})\ge \mu_i(\sigma_i^*,\sigma_{-i}^*)\label{eq_4}
-\end{equation}
-(\ref{eq_3})(\ref{eq_4})两式联立得
-\begin{equation}
-    \underline{v}_i\le\underline{w}_i
-\end{equation}
-结合(\ref{eq0})可知
-\begin{equation}
-    \underline{v}_i=\underline{w}_i=\mu_i^*\label{eq:res}
-\end{equation}
+这个结论对序贯博弈的纳什均衡不一定成立，如果选手2进行了可信的威胁，那么在纳什均衡中，选手1的支付可能更低。
+\subsection*{(e)}
+\subsubsection*{(1)}
+% Node styles
+\tikzset{
+    % Two node styles for game trees: solid and hollow
+    solid node/.style={circle,draw,inner sep=1.5,fill=black},
+    hollow node/.style={circle,draw,inner sep=1.5}
+}
+\begin{minipage}[H]{0.4\linewidth}
+    \begin{table}[H]
+        \begin{tabular}{|r|c|c|}
+            \hline
+            \diagbox{选手1}{选手2} & L       & R       \\\hline
+            U                  & $(0,1)$ & $(1,1)$ \\\hline
+            D                  & $(0,0)$ & $(1,0)$ \\\hline
+        \end{tabular}
+    \end{table}
+\end{minipage}
+\begin{minipage}[H]{0.4\linewidth}
+    \begin{tikzpicture}[]
+        \tikzstyle{level 1}=[level distance=15mm,sibling distance=35mm]
+        \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+        \node(0)[solid node,label=above:{选手1}]{}
+        child{
+        node(1)[solid node,label=right:{选手2}]{}
+        child{node[hollow node,label=below:{$(0,1)$}]{} edge from parent node[left]{$L$}}
+        child{node[hollow node,label=below:{$(1,1)$}]{} edge from parent node[right]{$R$}}
+        edge from parent node[left,xshift=-3]{$U$}
+        }
+        child{
+        node(2)[solid node,label=right:{选手2}]{}
+        child{node[hollow node,label=below:{$(0,0)$}]{} edge from parent node[left]{$L$}}
+        child{node[hollow node,label=below:{$(1,0)$}]{} edge from parent node[right]{$R$}}
+        edge from parent node[right,xshift=3]{$D$}
+        };
+    \end{tikzpicture}
+\end{minipage}
 
-\subsection{c}
+这个博弈中条件(ii)成立，但任何路径都是子博弈完美纳什均衡，而标准型的均衡只有$(U,R)$，支付为$(1,1)$
 
-根据纳什均衡和零和的性质有
-\begin{eqnarray}
-    \mu_i(\sigma_i',\sigma_{-i}') \ge\mu_i(\sigma_i'',\sigma_{-i}') =-\mu_{-i}(\sigma_i'',\sigma_{-i}') \ge-\mu_{-i}(\sigma_i'',\sigma_{-i}'') = \mu_i(\sigma_i'',\sigma_{-i} '') \\
-    \mu_i(\sigma_i',\sigma_{-i}') =\mu_{-i}(\sigma_i',\sigma_{-i}') \le-\mu_{-i}(\sigma_i',\sigma_{-i}'') =\mu_{i}(\sigma_i',\sigma_{-i}'') \le \mu_i(\sigma_i'',\sigma_{-i} '')
-\end{eqnarray}
-结合式(\ref{eq:res})可得
-\begin{equation}
-    \underline{v}_i=\mu_i(\sigma_i'',\sigma_{-i}'')\ge\mu_i(\sigma_i',\sigma_{-i}'')\ge\mu_i(\sigma_i',\sigma_{-i}')\ge\mu_i(\sigma_i'',\sigma_{-i}')\ge\mu_i(\sigma_i'',\sigma_{-i}'')\ge \underline{v}_i
-\end{equation}
-因此
-\begin{equation}
-    \underline{v}_i=\mu_i(\sigma_i'',\sigma_{-i}'')=\mu_i(\sigma_i',\sigma_{-i}'')=\mu_i(\sigma_i',\sigma_{-i}')=\mu_i(\sigma_i'',\sigma_{-i}')
-\end{equation}
-由于$(\sigma_i',\sigma_{-i}')$是一个纳什均衡，因此$\forall \sigma_i,\mu_i(\sigma_i,\sigma_{-i}')\le\mu_i(\sigma_i',\sigma_{-i}')=\mu_i(\sigma_i'',\sigma_{-i}')$，因此$(\sigma_i'',\sigma_{-i}')$也是一个纳什均衡；同理$(\sigma_i',\sigma_{-i}'')$也是一个纳什均衡
-\section{8.E.1}
-\begin{enumerate}
-    \item AA：不管强弱类型都攻击
-    \item AN：强类型则攻击，弱类型则不攻击
-    \item NA：强类型则不攻击，弱类型则攻击
-    \item NN：不管强弱类型都不攻击
-\end{enumerate}
-payoff 如表\ref{pic:payoff}所示
+\subsubsection*{(2)}
+\begin{minipage}[H]{0.4\linewidth}
+    \begin{table}[H]
+        \begin{tabular}{|r|c|c|}
+            \hline
+            \diagbox{选手1}{选手2} & L       & R       \\\hline
+            U                  & $(1,0)$ & $(0,1)$ \\\hline
+            D                  & $(0,1)$ & $(1,0)$ \\\hline
+        \end{tabular}
+    \end{table}
+\end{minipage}
+\begin{minipage}[H]{0.4\linewidth}
+    \begin{tikzpicture}[]
+        \tikzstyle{level 1}=[level distance=15mm,sibling distance=35mm]
+        \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+        \node(0)[solid node,label=above:{选手1}]{}
+        child{
+        node(1)[solid node,label=right:{选手2}]{}
+        child{node[hollow node,label=below:{$(1,0)$}]{} edge from parent node[left]{$L$}}
+        child{node[hollow node,label=below:{$(0,1)$}]{} edge from parent node[right]{$R$}}
+        edge from parent node[left,xshift=-3]{$U$}
+        }
+        child{
+        node(2)[solid node,label=right:{选手2}]{}
+        child{node[hollow node,label=below:{$(0,1)$}]{} edge from parent node[left]{$L$}}
+        child{node[hollow node,label=below:{$(1,0)$}]{} edge from parent node[right]{$R$}}
+        edge from parent node[right,xshift=3]{$D$}
+        };
+    \end{tikzpicture}
+\end{minipage}
 
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|c|c|c|c|}
-        \hline
-        \diagbox{军队2}{军队1} & AA                                                                  & AN                                                                & NA                                                      & NN                            \\\hline
-        AA                 & $\displaystyle \frac{M}{4}-\frac{s+w}{2},\frac{M}{4}-\frac{s+w}{2}$ & $\displaystyle \frac{M}{2}-\frac{s+w}{4},\frac{M}{4}-\frac{s}{2}$ & $\displaystyle \frac{3M}{4}-\frac{s+w}{4},-\frac{w}{2}$ & $\displaystyle M,0$           \\\hline
-        AN                 & $\displaystyle \frac{M}{4}-\frac{s}{2},\frac{M}{2}-\frac{s+w}{4}$   & $\displaystyle \frac{M-s}{4},\frac{M-s}{4}$                       & $\displaystyle \frac{M}{2}-\frac{s}{4},\frac{M-w}{4}$   & $\displaystyle \frac{M}{2},0$ \\\hline
-        NA                 & $\displaystyle -\frac{w}{2},\frac{3M}{4}-\frac{s+w}{4}$             & $\displaystyle \frac{M-w}{4},\frac{M}{2}-\frac{s}{4}$             & $\displaystyle \frac{M-w}{4},\frac{M-w}{4}$             & $\displaystyle \frac{M}{2},0$ \\\hline
-        NN                 & $\displaystyle 0,M$                                                 & $\displaystyle 0,\frac{M}{2}$                                     & $\displaystyle 0,\frac{M}{2}$                           & $\displaystyle 0,0$           \\\hline
-    \end{tabular}
-    \caption{策略组合的期望收益}
-    \label{pic:payoff}
-\end{table}
-这个标准形式博弈的任何纳什均衡都是原博弈的一个贝叶斯纳什均衡。
-
-\begin{enumerate}
-    \item 情形1:$M>w>s,w>\frac{M}{2}>s$，从上面的矩阵可以看到$(AA,AN)$和$(AN,AA)$是纯策略贝叶斯纳什均衡。
-    \item 情形2:$M>w>s,\frac{M}{2}<s$，从上面的矩阵可以看到$(AA,NN)$和$(NN,AA)$是纯策略贝叶斯纳什均衡。
-    \item 情形3:$w>M>s,\frac{M}{2}<s$，从上面的矩阵可以看到$(AA,NN)$，$(NN,AA)$和$(AN,AN)$是纯策略贝叶斯纳什均衡。
-    \item 情形4:$w>M>s,\frac{M}{2}>s$，从上面的矩阵可以看到$(AA,AN)$，$(AN,AA)$和$(AN,AN)$F是纯策略贝叶斯纳什均衡。
-\end{enumerate}
+这个博弈中，混合策略纳什均衡带来的期望收益为$\displaystyle \frac{1}{2}$，但子博弈纳什均衡仅有两个$(U,(R,L))$和$(D,(L,R))$，选手1的收益只能是0
+\section*{9.B.6}
+假设企业E进入后以$x$概率选择小利基，企业I以$y$概率选择大利基。为了让企业I选择大小利基无差异，需要有
+$$
+-6x-1(1-x)=1x-3(1-x)
+$$
+同理为了让企业E选择大小利基无差异，需要有
+$$
+-6y-1(1-y)=1y-3(1-y)
+$$
+从而得到
+$$
+x=\frac{2}{9},y=\frac{2}{9}
+$$
+此时企业E的支付为$\displaystyle 1x-3(1-x)=-\frac{19}{9}$，因此企业E的决定是不进入市场，所以子博弈完美纳什均衡为：
+\begin{itemize}
+    \item 企业E在第一个节点不进入，在第二个节点上$\displaystyle \frac{2}{9}$的概率选择小利基，$\displaystyle \frac{1}{5}$的概率选择小利基
+    \item 企业I在第二个节点上$\displaystyle \frac{2}{9}$的概率选择小利基，$\displaystyle \frac{2}{9}$的概率选择小利基
+\end{itemize}
 \end{document}
