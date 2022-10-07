@@ -33,3 +33,8 @@ jobs:
             glob_root_file: true
             latexmk_shell_escape: true
             latexmk_use_xelatex: true
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: "*.pdf"
