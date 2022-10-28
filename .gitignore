@@ -1,12 +1,3 @@
-*.pdf
-*.txt
-*.log
-*.docx
-*.aux
-*.fdb_latexmk
-*.fls
-*.out
-*.gz
-*.xdv
-*.png
-data/作业1.xlsx
+build/*
+*.xlsx
+indent.log
