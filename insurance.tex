@@ -1,0 +1,96 @@
+\documentclass[a4paper,12pt]{ctexart}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{csvsimple}
+\usepackage[scale=0.8]{geometry}
+\usepackage[hidelinks]{hyperref}
+\title{保险精算第三次作业}
+\author{董晨阳 2201211201}
+\date{\today}
+\begin{document}
+\maketitle
+\section*{第一题}
+\subsection*{a}
+累计赔付额如表\ref{tab:2}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/累计赔付额1.csv}
+    \caption{累计赔付额}\label{tab:2}
+\end{table}
+基于简单平均法计算发展因子如表\ref{tab:1}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/f1.csv}
+    \caption{发展因子}\label{tab:1}
+\end{table}
+利用链梯法可得每年的终极赔付额如表\ref{tab:3}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/1a.csv}
+    \caption{未决赔款准备金}\label{tab:3}
+\end{table}
+\subsection*{b}
+赔付率法：预计终极赔付额为$1500 \times 0.6 = 900$，赔付率法的未决赔款准备金为$900-288 = 612$
+
+B-F法：根据\ref{tab:1}及预计终极赔付额，计算未决赔款准备金为$900\times (\frac{1}{f_1f_2f_3})=645.23$
+\section*{第二题}
+\subsection*{a}
+平均赔付额如表\ref{tab:4}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/平均赔付额.csv}
+    \caption{平均赔付额(元)}\label{tab:4}
+\end{table}
+同一年数据相加得$d_0^*=900,d_1^*=1509.091,d_2^*=1753.030$，因此有
+\begin{eqnarray*}
+    c \hat\lambda_2=&d_2^*&=1753.030\\
+    \hat r_2=&P_{0,2}^*/n_0/c \hat\lambda_2&=0.114\\
+    c \hat\lambda_1=&d_1^*/(1-\hat r_2)&=1703.432\\
+    \hat r_1=&&=0.358\\
+    c \hat\lambda_2=&&=1703.850\\
+    \hat r_2=&&=0.528
+\end{eqnarray*}
+
+假设2021年后的日历年的年影响率为10\%，对$k>2$采用$$c\hat{\lambda}_k=c \hat\lambda_4 \times 1.1^{k-2}$$填充表\ref{tab:4}空下的位置有
+\begin{eqnarray*}
+    \hat P_{2020,2}=n_1\hat r_2c\hat\lambda_3=220000\\
+    \hat P_{2021,1}=n_2\hat r_1c\hat\lambda_3=758733.3\\
+    \hat P_{2021,2}=n_2\hat r_2c\hat\lambda_4=266200
+\end{eqnarray*}
+故终极赔付额如表\ref{tab:5}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/终极赔付额.csv}
+    \caption{终极赔付额}\label{tab:5}
+\end{table}
+\subsection*{b}
+采用基本方法，准备金计算如表\ref{tab:6}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/基本方法.csv}
+    \caption{基本方法计算准备金}\label{tab:6}
+\end{table}
+采用比率方法，准备金计算如表\ref{tab:7}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/比率方法.csv}
+    \caption{比率方法计算准备金}\label{tab:7}
+\end{table}
+采用总赔付额方法，准备金计算如表\ref{tab:8}所示
+\begin{table}[H]
+    \centering
+    \csvautotabular{data/总赔付额方法.csv}
+    \caption{总赔付额方法计算准备金}\label{tab:8}
+\end{table}
+
+采用三种方法的假设不同。
+\begin{itemize}
+\item 基本方法的未决赔款准备金为未来各发展年的预计赔付额相加，
+\item 比率方法则是进行了回溯，按照过去实际赔付额相较于理论赔付额的比例对理论进行调整。
+\item 总赔付额方法则是假设总赔付额一定，总额与实际累计赔付额的差为未决赔款准备金。
+\end{itemize}
+\end{document}
