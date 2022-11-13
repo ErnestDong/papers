@@ -1,23 +1,43 @@
-\documentclass{ctexart}
+\documentclass{ctexbeamer}
+\usetheme{CambridgeUS}
 \usepackage[style=gb7714-2015ay]{biblatex}
+\addbibresource{reference.bib}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{svg}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[hidelinks]{hyperref}
-\addbibresource{reference.bib}
-\title{Financial Crisis:\\ Is This a Failure of Risk Management}
-\setcounter{secnumdepth}{0}
-\author{董晨阳\\李昭伦}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{bibliography item}{}
+\setbeamertemplate{bibliography entry article}{}
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+\title[金融危机与风险管理的失败]{Financial Crisis:\\ Is This a Failure of Risk Management}
+\author{董晨阳 \and 李昭伦}
 \date{\today}
 \begin{document}
+\setbeamertemplate{bibliography item}{}
+\setbeamertemplate{bibliography entry article}{}
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+\AtBeginSection[]
+{
+\begin{frame}{目录}
+    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]
+\end{frame}
+}
 \maketitle
-\tableofcontents
-\clearpage
-
+\begin{frame}{目录}
+\tableofcontents[hideallsubsections]
+\end{frame}
 \input{lzl.tex}
 \input{dcy.tex}
 \nocite{*}
 \appendix
-\printbibliography
+\begin{frame}[allowframebreaks]{参考文献}
+    \nocite{*}
+    \tiny{\printbibliography[heading=bibliography,title=参考文献]}
+\end{frame}
 \end{document}
