@@ -69,11 +69,11 @@
 \end{figure}
 
 LUNA是今年来暴雷的加密货币之一。浮动价格的LUNA的应用是发行币值1美元的UST，每发行1美元的UST即销毁价值1美元的LUNA，反之亦然。而为了吸引人前来铸造UST完成左脚踩右脚的上升循环，LUNA官方推出了20\%定期收益的UST存款业务，吸引用户使用UST，70\%的UST存在该合约中。LUNA的价格也水涨船高，市值最高达410亿美元。但随着加息周期的到来，大量资金流出，销毁UST铸造LUNA，导致LUNA价格暴跌。
-\begin{figure}
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{img/ust.jpeg}
     \caption{LUNA/UST的关系}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{img/luna.png}
     \caption{LUNA从120美元跌至0.00014美元}
 \end{figure}
@@ -81,7 +81,7 @@ LUNA是今年来暴雷的加密货币之一。浮动价格的LUNA的应用是发
 LUNA的暴跌带动加密货币全线大跌，压垮了多家风投机构，包括Voyager、Celsius、3AC等数家AUM数十亿美元的机构。加密货币两大交易所币安和FTX均尝试购买这些机构的剩余资产包，最终FTX在竞价中胜出。
 \subsection{FTX的坠落：风险管理失败的例子}
 FTX由Sam Bankman-Fried(SBF)创立，在量化对冲基金中的经历使SBF信奉“从长期来看，风险爱好者和风险规避者都会输给风险中立者”。FTX发行了FTT作为FTX的“股票”，以衍生品交易见长。在SBF高调成为美国民主党第二大捐助者后不久，FTT暴跌、FTX不得不宣布破产。
-\begin{figure}
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{img/ftt.png}
     \caption{FTT暴跌}
 \end{figure}
@@ -103,7 +103,35 @@ SBF的另一家公司Alameda Research为FTX上的做市商，提供流动性并�
 \end{enumerate}
 
 \subsection{币安何以坚挺：风险管理如何规避危机}
-与FTX类似，币安作为全球最大的加密货币交易所也提供了不少衍生品合约，但币安却在加密货币暴雷潮中幸免于难。
+与FTX类似，币安作为全球最大的加密货币交易所也提供了不少衍生品合约。并且相较于FTX，币安被几乎各国监管不容。但币安却在加密货币暴雷潮中幸免于难，这与其相对严谨的风险管理是分不开的。
+
+逐条分析币安的风险管理措施，我们可以发现：
+\begin{enumerate}
+    \item \textbf{对已知风险的测量}：相较于FTX，币安对已知风险测量更为谨慎。币安同样表达过对Voyager等资产包的兴趣，在FTX暴雷初期也尝试并购FTX，但对资产包出价保持克制，对FTX并购前及时进行了\textbf{尽职调查}，避免了LUNA的暴雷通过Voyager、FTX层层递进传导到自身。
+    \item \textbf{对风险的考虑}：币安采取了储备金这一策略，即公布交易所现金资产的可验证证明，对挤兑风险更为重视。在FTX风波后，这一做法也在全行业逐步铺开。
+    \item \textbf{对风险的沟通}：币安呈现相对扁平化管理，组织架构比较简单，没有Alameda这种身兼裁判员和运动员的实体，相较于FTX风险沟通更为顺畅。
+    \item \textbf{风险监控}：在FTX资产负债表暴露后，币安是最早清仓所持有FTT的玩家之一，损失相对较小。其他机构大多将FTX处投资减记至0美元
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            机构&持仓最高峰值&投资金额\\\hline
+            红杉资本&3.5亿美元&2亿美元\\
+            淡马锡&3.2亿美元&3.2 亿美元\\
+            Paradigm&3.15亿美元&2.15亿美元\\
+            安大略教师养老金计划&1.25 亿美元&8000万美元\\\hline
+        \end{tabular}
+        \caption{FTX处投资减记至0美元的部分机构}
+    \end{table}
+    \item \textbf{风险对冲措施}：币安也发行了自己的代币BNB，但明确表示过“切勿以自行创建的代币作为抵押品”，从源头上规避掉了FTX利用FTT空手套白狼的问题，BNB价格也是近期少有的上涨的主流加密货币。
+    \begin{figure}[H]
+        \includegraphics[width=\linewidth]{img/bnb.png}
+        \caption{BNB代币价格}
+    \end{figure}
+    \item \textbf{风险衡量标准}：币安的风险衡量标准更加保守。币安由于倡导去中心化的金融交易被各国监管所不容，因而其在处理金融问题中更为小心谨慎，以免吸引更多的火力。因而其自称不会追求“有效地使用资本”，需要有大量储备以防不时之需。
+\end{enumerate}
+
+从币安和FTX两家交易所的对比，我们可以看到，更加完备更加全面的风险管理可以避免危机的进一步传导与扩大，风险管理对危机的规避和处理是有价值的。
 
 \section{结论}
 
