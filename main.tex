@@ -1,43 +1,16 @@
-\documentclass{ctexbeamer}
-\usetheme{CambridgeUS}
+\documentclass{ctexart}
 \usepackage[style=gb7714-2015ay]{biblatex}
 \addbibresource{reference.bib}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage{svg}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\setbeamertemplate{caption}[numbered]
-\setbeamertemplate{bibliography item}{}
-\setbeamertemplate{bibliography entry article}{}
-\setbeamertemplate{bibliography entry title}{}
-\setbeamertemplate{bibliography entry location}{}
-\setbeamertemplate{bibliography entry note}{}
-\title[金融危机与风险管理的失败]{Financial Crisis:\\ Is This a Failure of Risk Management}
-\author{董晨阳 \and 李昭伦}
+\title{基于KMV模型上市中小企业信贷风险研究}
+\author{董晨阳}
 \date{\today}
 \begin{document}
-\setbeamertemplate{bibliography item}{}
-\setbeamertemplate{bibliography entry article}{}
-\setbeamertemplate{bibliography entry title}{}
-\setbeamertemplate{bibliography entry location}{}
-\setbeamertemplate{bibliography entry note}{}
-\AtBeginSection[]
-{
-\begin{frame}{目录}
-    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]
-\end{frame}
-}
 \maketitle
-\begin{frame}{目录}
-\tableofcontents[hideallsubsections]
-\end{frame}
-\input{lzl.tex}
-\input{dcy.tex}
 \nocite{*}
 \appendix
-\begin{frame}[allowframebreaks]{参考文献}
-    \nocite{*}
-    \tiny{\printbibliography[heading=bibliography,title=参考文献]}
-\end{frame}
+\printbibliography[heading=bibliography,title=参考文献]
 \end{document}
