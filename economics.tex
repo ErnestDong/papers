@@ -108,7 +108,7 @@
 \begin{equation}
     \dot k=f(k)-c-(n+g)k=0\label{eq:2}
 \end{equation}
-科技增长水平下降会导致$\displaystyle \dot k>0$，因此$\dot k=0$会右移
+科技增长水平下降会导致$\displaystyle \dot k>0$，因此$\dot k=0$会上移
 \subsection*{b}
 从\nameref{sec:1}可知，$k_{NEW}^*>k_{OLD}^*$，此时位于均衡点$E$左侧，因此鞍点路径一定是从左至右的。由于一定存在且只存在一条均衡路径，且只有一个交点，根据相图可知，鞍点路径来自于左下向右上直至新均衡点。又由于$\dot k$右移过，因此在$k_{old}$处消费新的$\dot k=0$更低，如图\ref{fig:1}所示，因而瞬间点消费一定会更小，因而会减小
 \begin{figure}[H]
@@ -132,9 +132,9 @@
 \begin{enumerate}
     \item $kf(k)>0$显然成立
     \item 由于$f'(k)>0,f''(k)<0$，求导可知$f(k)-f'(k)k$递增，故$f(k)-f'(k)k>f(0)=0$
-    \item $\frac{\partial k}{\partial g}$根据\nameref{sec:a}可知是小于0的
+    \item $\frac{\partial k}{\partial g}$根据\nameref{sec:a}可知是大于0的
 \end{enumerate}
-综上$\frac{\partial s}{\partial g}>0$
+综上$\frac{\partial s}{\partial g}>0$恒成立
 \subsection*{d}
 将$f(k)=k^\alpha$代入(\ref{eq:3})得
 \begin{equation}\label{eq:final}
@@ -146,6 +146,6 @@
 \end{equation*}
 代入(\ref{eq:final})解得
 \begin{equation}
-    \frac{\partial s}{\partial g}=\frac{\alpha}{\rho+\theta g}\left(1+\frac{\theta(n+g)}{\rho+\theta g}\right)
+    \frac{\partial s}{\partial g}=\frac{\alpha}{\rho+\theta g}\left(1-\frac{\theta(n+g)}{\rho+\theta g}\right)
 \end{equation}
 \end{document}
