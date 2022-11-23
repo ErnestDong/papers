@@ -1,6 +1,5 @@
 #%%
 #!%cd /Users/dcy/Code/papers.worktrees/risk-management
-import statsmodels.api as sm
 import pandas as pd
 
 st = pd.read_excel("data/实施ST.xlsx", skipfooter=2)

@@ -11,6 +11,7 @@ class Dataloader:
         "sigma_a": "资产价值波动率",
         "sigma_e": "股权价值波动率",
         "d": "债务价值",
+        # "r": "隔夜拆借利率",
         "r": "ROA",
         "assets": "资产规模",
     }

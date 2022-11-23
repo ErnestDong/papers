@@ -1,8 +1,9 @@
 #%%
 # 应该是流动资产<流动负债
+from pathlib import Path
+
 import pandas as pd
 import statsmodels.api as sm
-from pathlib import Path
 
 project_path = Path(__file__).parent.parent
 
