@@ -3,7 +3,14 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from dataloader import Dataloader
+
+project_root = Path(__file__).parent.parent
+sns.set(
+    rc={"font.family": "SimHei", "figure.figsize": (6, 3), "axes.unicode_minus": False},
+    style="white",
+)
 
 
 #!%cd /Users/dcy/Code/papers.worktrees/risk-management
@@ -48,5 +55,20 @@ class KMV:
 if __name__ == "__main__":
     model = KMV()
     dd = model.distance_to_default()
-    print(dd.mean(axis=1))
+    res = dd.stack().reset_index()
+    res.columns = ["Date", "Stock", "DD"]
+    st = (
+        pd.read_excel(
+            project_root / "data/sts.xlsx", usecols=["stock", "name", "date", "enddate"]
+        )
+        .set_index("stock")
+        .to_dict()
+    )
+    res["ST"] = res.apply(
+        lambda x: "ST" if model.label[x["Stock"]] in st["name"] else "非ST",
+        axis=1,
+    )
+    res["Date"] = res["Date"].dt.strftime("%y-%m")
+    fig = sns.scatterplot(data=res, x="Date", y="DD", hue="ST").get_figure()
+    fig.savefig(project_root / "img/dd.png")
 # %%
