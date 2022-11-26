@@ -1,4 +1,8 @@
 build/*
-*.xlsx
+*.pdf
 indent.log
 *.pptx*
+.pdm.toml
+data/~$*
+*.pyc
+*.docx
