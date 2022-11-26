@@ -5,4 +5,4 @@ indent.log
 .pdm.toml
 data/~$*
 *.pyc
-_minted*
+*.docx

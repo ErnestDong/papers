@@ -56,7 +56,7 @@ if __name__ == "__main__":
     model = KMV()
     dd = model.distance_to_default()
     res = dd.stack().reset_index()
-    res.columns = ["Date", "Stock", "DD"]
+    res.columns = ["date", "Stock", "DD"]
     st = (
         pd.read_excel(
             project_root / "data/sts.xlsx", usecols=["stock", "name", "date", "enddate"]
@@ -65,10 +65,13 @@ if __name__ == "__main__":
         .to_dict()
     )
     res["ST"] = res.apply(
-        lambda x: "ST" if model.label[x["Stock"]] in st["name"] else "非ST",
+        lambda x: "ST"
+        if (temp := model.label[x["Stock"]]) in st["name"]
+        and st["date"][temp] <= x["date"] <= st["enddate"][temp]
+        else "非ST",
         axis=1,
     )
-    res["Date"] = res["Date"].dt.strftime("%y-%m")
-    fig = sns.scatterplot(data=res, x="Date", y="DD", hue="ST").get_figure()
+    res["date"] = res["date"].dt.strftime("%y-%m")
+    fig = sns.scatterplot(data=res, x="date", y="DD").get_figure()
     fig.savefig(project_root / "img/dd.png")
 # %%
