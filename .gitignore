@@ -7,3 +7,6 @@ data/~$*
 *.pyc
 *.docx
 *.xlsx
+src/main/*
+src/+main/*
+*.log
