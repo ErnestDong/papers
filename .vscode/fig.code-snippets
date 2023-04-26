@@ -1,0 +1,56 @@
+{
+	// Place your snippets for latex here. Each snippet is defined under a snippet name and has a prefix, body and
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+	// same ids are connected.
+	// Example:
+	"figure": {
+		"prefix": "fig",
+		"body": [
+			"\\begin{figure}[H]",
+			"    {\\centering",
+			"    \\caption{$3}",
+			"    \\includegraphics[${2:width=\\linewidth}]{$1}\\par}",
+			"    \\footnotesize{资料来源：$4}",
+			"\\end{figure}",
+			"$0"
+		],
+		"description": "figure"
+	},
+	"minipage": {
+		"prefix": "mini",
+		"body": [
+			"\\begin{figure}[${5:H}]",
+			"    \\begin{minipage}{0.48\\linewidth}",
+			"        \\caption{$2}",
+			"        \\centering",
+			"        \\includegraphics[width=\\linewidth]{$1}",
+			"    \\end{minipage}",
+			"    \\begin{minipage}{0.48\\linewidth}",
+			"        \\caption{$4}",
+			"        \\centering",
+			"        \\includegraphics[width=\\linewidth]{$3}",
+			"    \\end{minipage}",
+			"    \\footnotesize{资料来源：$6}",
+			"\\end{figure}",
+			"$0"
+		]
+	},
+	"table": {
+		"prefix": "tab",
+		"body": [
+			"\\begin{table}[H]",
+			"    \\caption{$1}",
+			"    \\centering",
+			"    \\begin{tabular}{$2}",
+			"        \\toprule",
+			"         $3",
+			"        \\midrule",
+			"         $4",
+			"        \\bottomrule",
+			"    \\end{tabular}",
+			"\\end{table}",
+			"$0"
+		]
+	}
+}
