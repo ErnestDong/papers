@@ -8,49 +8,48 @@
 		"prefix": "fig",
 		"body": [
 			"\\begin{figure}[H]",
-			"    {\\centering",
+			"    \\centering",
 			"    \\caption{$3}",
-			"    \\includegraphics[${2:width=\\linewidth}]{$1}\\par}",
-			"    \\footnotesize{资料来源：$4}",
+			"    \\includegraphics[${2:width=\\linewidth}]{$1}",
 			"\\end{figure}",
 			"$0"
 		],
 		"description": "figure"
-	},
-	"minipage": {
-		"prefix": "mini",
-		"body": [
-			"\\begin{figure}[${5:H}]",
-			"    \\begin{minipage}{0.48\\linewidth}",
-			"        \\caption{$2}",
-			"        \\centering",
-			"        \\includegraphics[width=\\linewidth]{$1}",
-			"    \\end{minipage}",
-			"    \\begin{minipage}{0.48\\linewidth}",
-			"        \\caption{$4}",
-			"        \\centering",
-			"        \\includegraphics[width=\\linewidth]{$3}",
-			"    \\end{minipage}",
-			"    \\footnotesize{资料来源：$6}",
-			"\\end{figure}",
-			"$0"
-		]
-	},
-	"table": {
-		"prefix": "tab",
-		"body": [
-			"\\begin{table}[H]",
-			"    \\caption{$1}",
-			"    \\centering",
-			"    \\begin{tabular}{$2}",
-			"        \\toprule",
-			"         $3",
-			"        \\midrule",
-			"         $4",
-			"        \\bottomrule",
-			"    \\end{tabular}",
-			"\\end{table}",
-			"$0"
-		]
 	}
+	// "minipage": {
+	// 	"prefix": "mini",
+	// 	"body": [
+	// 		"\\begin{figure}[${5:H}]",
+	// 		"    \\begin{minipage}{0.48\\linewidth}",
+	// 		"        \\caption{$2}",
+	// 		"        \\centering",
+	// 		"        \\includegraphics[width=\\linewidth]{$1}",
+	// 		"    \\end{minipage}",
+	// 		"    \\begin{minipage}{0.48\\linewidth}",
+	// 		"        \\caption{$4}",
+	// 		"        \\centering",
+	// 		"        \\includegraphics[width=\\linewidth]{$3}",
+	// 		"    \\end{minipage}",
+	// 		"    \\footnotesize{资料来源：$6}",
+	// 		"\\end{figure}",
+	// 		"$0"
+	// 	]
+	// },
+	// "table": {
+	// 	"prefix": "tab",
+	// 	"body": [
+	// 		"\\begin{table}[H]",
+	// 		"    \\caption{$1}",
+	// 		"    \\centering",
+	// 		"    \\begin{tabular}{$2}",
+	// 		"        \\toprule",
+	// 		"         $3",
+	// 		"        \\midrule",
+	// 		"         $4",
+	// 		"        \\bottomrule",
+	// 		"    \\end{tabular}",
+	// 		"\\end{table}",
+	// 		"$0"
+	// 	]
+	// }
 }
