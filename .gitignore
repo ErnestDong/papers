@@ -10,3 +10,4 @@ data/~$*
 src/main/*
 src/+main/*
 *.log
+.pdm-python
