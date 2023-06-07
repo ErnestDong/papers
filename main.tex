@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
+\title{风管模型第四次作业}
+\author{董晨阳 \and 李昭伦}
 \usepackage{xeCJK}
-\author{董晨阳\and 李昭伦}
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
 
@@ -165,8 +166,6 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{main}
-
 
 
 
@@ -391,368 +390,457 @@
 
 
 
-    \hypertarget{ux98ceux7ba1ux6a21ux578bux7b2cux4e09ux6b21ux4f5cux4e1a}{%
-\section{风管模型第三次作业}\label{ux98ceux7ba1ux6a21ux578bux7b2cux4e09ux6b21ux4f5cux4e1a}}
+    \hypertarget{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}{%
+\label{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}}
 
-    \hypertarget{ux5355ux4e2aux516cux53f8ux7684-kmv-ux6a21ux578b}{%
-\subsection{单个公司的 KMV
-模型}\label{ux5355ux4e2aux516cux53f8ux7684-kmv-ux6a21ux578b}}
+股票市场的走势是一个国家经济状况的``晴雨表''。长久以来，此领域一直是众多学者的研究重点。目前，预测股票价格走势的方法多种多样，但是均存在对股票价格的波动拟合效果较差、预测精度有限等问题。时间序列模型具有应用范围广、限制要求少、短期预测准确率高等优点，借此，它成为了金融预测领域较受欢迎的预测模型之一。
 
-\hypertarget{ux5047ux8bbe}{%
-\subsubsection{假设}\label{ux5047ux8bbe}}
+时间序列分析是一种主要用于描述和探究某一现象随时间的发展如何变化的分析方法。时间序列是同一种现象在不同时间上的相继观察值排列而成的一组数字序列。人们运用时间序列的历史数据，揭示现象随时间变化的规律并将这种规律延伸到未来，从而对该现象的未来做出预测。
 
-\begin{itemize}
-\tightlist
-\item
-  市场的无风险利率为3\%
-\item
-  公司的违约实施点为企业1年以下短期债务的价值加上未清偿长期债务账面价值的一半
-\item
-  贷款期限一年
-\item
-  当公司发生违约时，违约回收率为0，即全部贷款均不能回收。
-\item
-  贷款利率为包括流动性溢价和信用溢价，分别用无风险利率和预期违约率\$\times\$100表示，即贷款利率
-  = 无风险利率 + 预期违约率 \(\times\) 100
-\end{itemize}
-
-\hypertarget{ux8ba1ux7b97ux80a1ux7968ux4ef7ux683cux6ce2ux52a8ux7387}{%
-\subsubsection{计算股票价格波动率}\label{ux8ba1ux7b97ux80a1ux7968ux4ef7ux683cux6ce2ux52a8ux7387}}
-
-我们选取了三家上市公司，分别为比亚迪，三一重工，宁德时代，比亚迪为汽车厂商，三一重工为国有大型装备制造厂商，宁德时代为我国新能源电池领头企业，三家厂商都具备较好的现金流以及信用背书，因此是我们选取的贷款对象。
-
-根据三家公司的历史股价数据，我们计算出三家厂商的股票波动率。
+本文运用时间序列分析方法，使用LN、AR、ARCH、GARCH、RSLN-2五个模型对样本数据进行拟合，计算对数似然函数的最大值以及AIC和SBC，比较不同模型的拟合效果，并对沪深300指数未来的走势进行预判。
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{4}{\boxspacing}
+\prompt{In}{incolor}{48}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{k+kn}{import} \PY{n+nn}{glob}
-
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
 \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
 \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
 \PY{k+kn}{from} \PY{n+nn}{arch} \PY{k+kn}{import} \PY{n}{arch\PYZus{}model}
-\PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k+kn}{import} \PY{n}{optimize}\PY{p}{,} \PY{n}{stats}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{chi2}
+\PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{arima}\PY{n+nn}{.}\PY{n+nn}{model} \PY{k+kn}{import} \PY{n}{ARIMA}
+\PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{regime\PYZus{}switching}\PY{n+nn}{.}\PY{n+nn}{markov\PYZus{}regression} \PY{k+kn}{import} \PY{n}{MarkovRegression}
 
-\PY{n}{companies} \PY{o}{=} \PY{n}{glob}\PY{o}{.}\PY{n}{glob}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/trade/*.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}importing done\PYZdq{})}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimHei}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{k+kc}{False}
 \PY{n}{result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{rate} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{companies}\PY{p}{:}
-    \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{company}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{skiprows}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}
-    \PY{n}{company} \PY{o}{=} \PY{n}{company}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-    \PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{V}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{总市值}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10000}
-    \PY{p}{\PYZcb{}}
-    \PY{n}{rate}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{涨跌幅}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{l+m+mi}{100}
-\PY{n}{rate} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{rate}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
-\PY{n}{rate}
+\PY{n}{df} \PY{o}{=} \PY{p}{(}
+    \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{./lib/创业板指.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{skipfooter}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
+    \PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{代码}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{名称}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
+    \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{dtype} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{object}\PY{l+s+s2}{\PYZdq{}} \PY{k}{else} \PY{n}{x}
+\PY{p}{)}
+\PY{n}{df}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weeknum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{year}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{isocalendar}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{week}\PY{p}{)}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kde}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{4}{\boxspacing}
+\prompt{Out}{outcolor}{48}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-                比亚迪     三一重工     宁德时代
-时间
-2022-05-24 -0.04810 -0.02622      NaN
-2022-05-25  0.02206  0.01816      NaN
-2022-05-26 -0.00195  0.05105      NaN
-2022-05-27  0.00781 -0.00644      NaN
-2022-05-30  0.03199 -0.01119      NaN
-{\ldots}             {\ldots}      {\ldots}      {\ldots}
-2023-05-18 -0.00736 -0.00864 -0.03167
-2023-05-19  0.00039 -0.01370 -0.01033
-2023-05-22  0.02284  0.01578  0.00130
-2023-05-23 -0.00819 -0.01305 -0.02119
-2023-05-24 -0.00388 -0.02141 -0.00075
-
-[245 rows x 3 columns]
+<Axes: ylabel='Density'>
 \end{Verbatim}
 \end{tcolorbox}
 
-    \hypertarget{ux5229ux7528-garch-ux6a21ux578bux8ba1ux7b97ux76f8ux5173ux7cfbux6570ux4e0eux534fux65b9ux5deeux9635}{%
-\subsubsection{利用 garch
-模型计算相关系数与协方差阵}\label{ux5229ux7528-garch-ux6a21ux578bux8ba1ux7b97ux76f8ux5173ux7cfbux6570ux4e0eux534fux65b9ux5deeux9635}}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{main_files/main_1_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
 
-假设三只股票的收益率服从GARCH
-(1,1)，然后算出得到标的资产组合的协方差矩阵和相关阵。
+    \hypertarget{ux7b2cux4e00ux9898}{%
+\section{第一题}\label{ux7b2cux4e00ux9898}}
+
+\hypertarget{ln-ux6a21ux578b}{%
+\subsection{LN 模型}\label{ln-ux6a21ux578b}}
+
+我们依据\cite{wang2020corrected} 提出的算法，对 Lognormal
+模型进行最大似然估计，即
+
+\[
+\log(L) = -\sum_{i=1}^n\log x_i-n\log\sigma-\frac{n}{2}\log 2\pi - \sum_{i=11^n}\frac{(\log x_i-\mu)^2}{2\sigma^2}
+\]
+
+采用样本均值 \(\hat\mu\) 和样本方差 \(\hat\sigma^2\) 代入计算
+\(AIC\)、\(SBC\)，得到的结果如下表所示
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{5}{\boxspacing}
+\prompt{In}{incolor}{49}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{cov} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{var} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{r2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{rate} \PY{o}{=} \PY{n}{rate}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{companies}\PY{p}{:}
-    \PY{n}{company} \PY{o}{=} \PY{n}{company}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-    \PY{n}{r2}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-    \PY{n}{cross} \PY{o}{=} \PY{n}{rate}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{*} \PY{n}{rate}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{*} \PY{l+m+mi}{1000}
-    \PY{n}{arch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{cross}\PY{p}{)}
-    \PY{n}{arch\PYZus{}param} \PY{o}{=} \PY{n}{arch}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-    \PY{n}{var}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{arch\PYZus{}param}\PY{o}{.}\PY{n}{forecast}\PY{p}{(}\PY{n}{reindex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{variance}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{1000}
-    \PY{n}{parameters} \PY{o}{=} \PY{n}{arch\PYZus{}param}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
-    \PY{n}{cross} \PY{o}{=} \PY{n}{rate}\PY{p}{[}\PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{rate}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{n}{i} \PY{o}{!=} \PY{n}{company}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{prod}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-    \PY{n}{covlist} \PY{o}{=} \PY{p}{[}\PY{n}{cross}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{o}{*}\PY{l+m+mi}{100000}
-    \PY{n+nb}{print}\PY{p}{(}\PY{n}{parameters}\PY{p}{)}
-    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{cross}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-        \PY{n}{covlist}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{n}{cross}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{n}{covlist}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-    \PY{n}{cov}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{n}{covlist}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{l+m+mi}{100000}
-\PY{n}{covar} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{i}\PY{p}{:} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{cov}\PY{p}{\PYZcb{}}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{cov}\PY{p}{:}
-    \PY{n}{r2}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}
-    \PY{n}{covar}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{n}{var}\PY{p}{[}\PY{n}{company}\PY{p}{]}
-    \PY{n}{others} \PY{o}{=} \PY{n+nb}{tuple}\PY{p}{(}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{cov} \PY{k}{if} \PY{n}{i} \PY{o}{!=} \PY{n}{company}\PY{p}{)}
-    \PY{n}{r2}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{cov}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{/} \PY{p}{(}
-        \PY{n}{var}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{*}\PY{o}{*} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{var}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]} \PY{o}{*}\PY{o}{*} \PY{l+m+mf}{0.5}
-    \PY{p}{)}
-    \PY{n}{r2}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{r2}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}
-    \PY{n}{covar}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{cov}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{*}\PY{o}{*} \PY{l+m+mf}{0.5}
-    \PY{n}{covar}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{others}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{cov}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{*}\PY{o}{*} \PY{l+m+mf}{0.5}
-\PY{n}{corr} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{r2}\PY{p}{)}
-\PY{n}{cov} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{covar}\PY{p}{)}
-\PY{n}{corr}
+\PY{c+c1}{\PYZsh{} df[\PYZdq{}weeknum\PYZdq{}] = df.index.map(lambda x: str(x.year) + \PYZdq{}\PYZhy{}\PYZdq{} + str(x.isocalendar().week))}
+\PY{c+c1}{\PYZsh{} df = df.drop\PYZus{}duplicates(subset=\PYZdq{}weeknum\PYZdq{}, keep=\PYZdq{}last\PYZdq{})}
+\PY{n}{log} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
+\PY{n}{mu} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{sigma} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
+\PY{n}{likelyhood\PYZus{}ln} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
+    \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{sigma}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{mu}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{likelyhood\PYZus{}ln}
+\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LN}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+            AIC          SBC    k       log(L)
+LN  1180.436168  1175.934878  2.0  1182.436168
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ar1-ux6a21ux578b}{%
+\subsection{AR(1) 模型}\label{ar1-ux6a21ux578b}}
+
+自回归模型（AR）是最简单的时间序列处理方法，对LogNormal的改进在于考虑了变量之间的相关性，用过去随机变量的情况来描述未来该随机变量的取值。在自回归模型假设下，随机变量的取值总会向长期均值靠拢。我们选择一阶自回归模型对样本数据进行拟合，函数表达式为
+\[Y_t=\mu+\alpha(Y_{t-1}-\mu)+\sigma\varepsilon_t\] 其中
+\(\alpha\in(-1,1)\) ，\(\varepsilon_t\)
+为相互独立且符合标准正态分布的白噪声过程。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{ARIMA}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n}{AR1} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{AR1}\PY{o}{.}\PY{n}{llf}
+\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AR(1)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{AR1}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+                               SARIMAX Results
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  666
+Model:                 ARIMA(1, 0, 0)   Log Likelihood                1183.091
+Date:                Wed, 07 Jun 2023   AIC                          -2360.182
+Time:                        16:46:57   BIC                          -2346.678
+Sample:                             0   HQIC                         -2354.950
+                                - 666
+Covariance Type:                  opg
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0011      0.002      0.633      0.527      -0.002       0.004
+ar.L1          0.0442      0.031      1.450      0.147      -0.016       0.104
+sigma2         0.0017   7.24e-05     23.157      0.000       0.002       0.002
+================================================================================
+===
+Ljung-Box (L1) (Q):                   0.01   Jarque-Bera (JB):
+85.37
+Prob(Q):                              0.93   Prob(JB):
+0.00
+Heteroskedasticity (H):               0.77   Skew:
+-0.49
+Prob(H) (two-sided):                  0.05   Kurtosis:
+4.46
+================================================================================
+===
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-
+step).
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         k       log(L)          AIC          SBC
+LN     2.0  1182.436168  1180.436168  1175.934878
+AR(1)  3.0  1183.090866  1180.090866  1173.338932
+\end{Verbatim}
+\end{tcolorbox}
+
+    自回归方法的优点是所需资料不多，可用自身变数数列来进行预测。但是这种方法受到一定的限制：必须具有自相关，自相关系数是关键。如果自相关系数(R)小于0.5，则不宜采用，否则预测结果极不准确。自回归只能适用于预测与自身前期相关的经济现象，即受自身历史因素影响较大的经济现象，如矿的开采量，各种自然资源产量等；对于受社会因素影响较大的经济现象，不宜采用自回归，而应改采可纳入其他变数的向量自回归模型。
+
+\hypertarget{arch-ux6a21ux578b}{%
+\subsection{ARCH 模型}\label{arch-ux6a21ux578b}}
+
+ARCH模型即自回归条件异方差模型，是一种用来处理时间序列的模型。在股票中，ARCH可以用来预测股票的波动率，从而控制风险。粗略地说，该模型将当前一切可利用信息作为条件，并采用某种自回归形式来刻画方差的变异，对于一个时间序列而言，在不同时刻可利用的信息不同，而相应的条件方差也不同，利用ARCH模型，可以刻画出随时间而变异的条件方差。ARCH模型解决了LogNormal和AR被诟病的波动率恒定问题。这里我们同样使用一阶条件异方差模型对样本数据进行拟合，函数表达式为
+\[Y_t=\mu+\sigma_t \varepsilon_t\] 其中
+\(\sigma_t^2=a_0+a_1(Y_(t-1)-\mu)^2\)。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{arch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{arch}\PY{o}{.}\PY{n}{loglikelihood}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{arch}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ARCH}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Optimization terminated successfully    (Exit mode 0)
-            Current function value: 43.22343031390047
-            Iterations: 12
-            Function evaluations: 65
-            Gradient evaluations: 12
-omega       0.245201
-alpha[1]    0.008961
-beta[1]     0.000000
-Name: params, dtype: float64
-Optimization terminated successfully    (Exit mode 0)
-            Current function value: 18.108477655665272
-            Iterations: 12
-            Function evaluations: 70
-            Gradient evaluations: 11
-omega       1.145838e-09
-alpha[1]    1.733417e-11
-beta[1]     9.845984e-01
-Name: params, dtype: float64
-Optimization terminated successfully    (Exit mode 0)
-            Current function value: 39.71127760557582
-            Iterations: 11
-            Function evaluations: 68
-            Gradient evaluations: 10
-omega       3.606108e-03
-alpha[1]    1.386579e-12
-beta[1]     1.000000e+00
-Name: params, dtype: float64
+            Current function value: -1160.4776946315305
+            Iterations: 6
+            Function evaluations: 14
+            Gradient evaluations: 2
+                      Constant Mean - ARCH Model Results
+==============================================================================
+Dep. Variable:                 收盘价(元)   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                       ARCH   Log-Likelihood:                1160.48
+Distribution:                  Normal   AIC:                          -2314.96
+Method:            Maximum Likelihood   BIC:                          -2301.45
+                                        No. Observations:                  666
+Date:                Wed, Jun 07 2023   Df Residuals:                      665
+Time:                        16:46:57   Df Model:                            1
+                                  Mean Model
+=============================================================================
+                 coef    std err          t      P>|t|       95.0\% Conf. Int.
+-----------------------------------------------------------------------------
+mu         8.5403e-04  1.679e-03      0.509      0.611 [-2.437e-03,4.145e-03]
+                              Volatility Model
+============================================================================
+                 coef    std err          t      P>|t|      95.0\% Conf. Int.
+----------------------------------------------------------------------------
+omega      8.4019e-04  6.573e-05     12.782  2.055e-37 [7.114e-04,9.690e-04]
+alpha[1]       0.2000  4.359e-02      4.589  4.460e-06     [  0.115,  0.285]
+============================================================================
+
+Covariance estimator: robust
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{5}{\boxspacing}
+\prompt{Out}{outcolor}{51}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-           比亚迪      三一重工      宁德时代
-比亚迪   1.000000  0.017392  0.000003
-宁德时代  0.000003  0.016563  1.000000
-三一重工  0.017392  1.000000  0.016563
+         k       log(L)          AIC          SBC
+LN     2.0  1182.436168  1180.436168  1175.934878
+AR(1)  3.0  1183.090866  1180.090866  1173.338932
+ARCH   3.0  1160.477695  1157.477695  1150.725760
 \end{Verbatim}
 \end{tcolorbox}
 
-    \hypertarget{ux8ba1ux7b97ux8fddux7ea6ux70b9}{%
-\subsubsection{计算违约点}\label{ux8ba1ux7b97ux8fddux7ea6ux70b9}}
+    \hypertarget{garch-ux6a21ux578b}{%
+\subsection{GARCH 模型}\label{garch-ux6a21ux578b}}
+
+GARCH模型，即广义ARCH模型，它是对ARCH模型的进一步扩展。它同时考虑了序列相关和条件方差，对误差的方差进行了进一步建模，具有更强的灵活性。本文选择
+\(GARCH(1,1)\) 模型对历史数据进行拟合。
+
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{6}{\boxspacing}
+\prompt{In}{incolor}{52}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{companies} \PY{o}{=} \PY{n}{glob}\PY{o}{.}\PY{n}{glob}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/balance/*.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{companies}\PY{p}{:}
-    \PY{n}{df} \PY{o}{=} \PY{p}{(}
-        \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{company}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{skipfooter}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{file}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-        \PY{o}{.}\PY{n}{T}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-        \PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
-    \PY{p}{)}
-    \PY{n}{company} \PY{o}{=} \PY{n}{company}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-    \PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{流动负债合计}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{+} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{非流动负债合计}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-\PY{p}{\PYZob{}}\PY{n}{company}\PY{p}{:}\PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{result}\PY{p}{\PYZcb{}}
+\PY{n}{garch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,} \PY{n}{garch}\PY{o}{.}\PY{n}{loglikelihood}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{garch}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GARCH}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: -1228.8837666021368
+            Iterations: 14
+            Function evaluations: 101
+            Gradient evaluations: 13
+                     Constant Mean - GARCH Model Results
+==============================================================================
+Dep. Variable:                 收盘价(元)   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                      GARCH   Log-Likelihood:                1228.88
+Distribution:                  Normal   AIC:                          -2449.77
+Method:            Maximum Likelihood   BIC:                          -2431.76
+                                        No. Observations:                  666
+Date:                Wed, Jun 07 2023   Df Residuals:                      665
+Time:                        16:46:58   Df Model:                            1
+                                  Mean Model
+==============================================================================
+                  coef    std err          t      P>|t|       95.0\% Conf. Int.
+------------------------------------------------------------------------------
+mu         -1.3192e-04  1.358e-03 -9.714e-02      0.923 [-2.794e-03,2.530e-03]
+                              Volatility Model
+============================================================================
+                 coef    std err          t      P>|t|      95.0\% Conf. Int.
+----------------------------------------------------------------------------
+omega      5.4685e-05  2.549e-05      2.146  3.190e-02 [4.733e-06,1.046e-04]
+alpha[1]       0.1100  2.725e-02      4.036  5.444e-05   [5.656e-02,  0.163]
+beta[1]        0.8561  3.537e-02     24.206 1.927e-129     [  0.787,  0.925]
+============================================================================
+
+Covariance estimator: robust
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         k       log(L)          AIC          SBC
+LN     2.0  1182.436168  1180.436168  1175.934878
+AR(1)  3.0  1183.090866  1180.090866  1173.338932
+ARCH   3.0  1160.477695  1157.477695  1150.725760
+GARCH  4.0  1228.883767  1224.883767  1215.881187
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{rsln-2}{%
+\subsection{RSLN-2}\label{rsln-2}}
+
+RSLN
+模型本质是马尔可夫状态转移模型，因而我们参考\href{https://www.statsmodels.org/dev/generated/statsmodels.tsa.regime_switching.markov_regression.MarkovRegression.html}{statsmodels
+文档}，令两 regime
+分布异方差，回归结果如下表，显示异方差的确存在(不同状态下的方差影响显著)。
+
+同样，我们提取似然函数对数，并计算 \(AIC\)、\(SBC\)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{rsln} \PY{o}{=} \PY{n}{MarkovRegression}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{switching\PYZus{}variance}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 异方差}
+\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{6}\PY{p}{,} \PY{n}{rsln}\PY{o}{.}\PY{n}{llf}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{rsln}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RSLN\PYZhy{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+                        Markov Switching Model Results
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  666
+Model:               MarkovRegression   Log Likelihood                1220.002
+Date:                Wed, 07 Jun 2023   AIC                          -2428.005
+Time:                        16:46:58   BIC                          -2400.997
+Sample:                             0   HQIC                         -2417.541
+                                - 666
+Covariance Type:               approx
+                             Regime 0 parameters
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0014      0.001      0.935      0.350      -0.002       0.004
+sigma2         0.0012   8.76e-05     14.079      0.000       0.001       0.001
+                             Regime 1 parameters
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.0015      0.010     -0.152      0.879      -0.021       0.018
+sigma2         0.0056      0.001      4.974      0.000       0.003       0.008
+                         Regime transition parameters
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+p[0->0]        0.9945      0.005    201.920      0.000       0.985       1.004
+p[1->0]        0.0379      0.037      1.032      0.302      -0.034       0.110
+==============================================================================
+
+Warnings:
+[1] Covariance matrix calculated using numerical (complex-step) differentiation.
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+          k       log(L)          AIC          SBC
+LN      2.0  1182.436168  1180.436168  1175.934878
+AR(1)   3.0  1183.090866  1180.090866  1173.338932
+ARCH    3.0  1160.477695  1157.477695  1150.725760
+GARCH   4.0  1228.883767  1224.883767  1215.881187
+RSLN-2  6.0  1220.002313  1214.002313  1200.498444
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux7efcux5408ux6bd4ux8f83}{%
+\subsection{综合比较}\label{ux7efcux5408ux6bd4ux8f83}}
+
+不同似然函数对比采用 \(\chi^2\) 检验，以 lognormal 模型为基准进行 LRT
+检验，结果如下表显示。综合似然函数最大值、\(AIC\)、\(SBC\) 与 \(LRT\)
+检验值，GARCH 模型的似然函数、\(AIC\)、\(SBC\) 最大，且相较于 lognormal
+模型效果提升显著。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{6}{\boxspacing}
+\prompt{Out}{outcolor}{54}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\{'比亚迪': 39742875.85, '三一重工': 7738982.25, '宁德时代': 36075492.39\}
+          k       log(L)          AIC          SBC
+LN      2.0  1182.436168  1180.436168  1175.934878
+AR(1)   3.0  1183.090866  1180.090866  1173.338932
+ARCH    3.0  1160.477695  1157.477695  1150.725760
+GARCH   4.0  1228.883767  1224.883767  1215.881187
+RSLN-2  6.0  1220.002313  1214.002313  1200.498444
 \end{Verbatim}
 \end{tcolorbox}
 
-    \hypertarget{ux8ba1ux7b97ux9884ux671fux8fddux7ea6ux6982ux7387-edf}{%
-\subsubsection{计算预期违约概率
-EDF}\label{ux8ba1ux7b97ux9884ux671fux8fddux7ea6ux6982ux7387-edf}}
+    \hypertarget{ux7b2cux4e8cux9898}{%
+\section{第二题}\label{ux7b2cux4e8cux9898}}
 
-利用KMV模型，我们计算了三家公司各自的预期违约概率，结果如下：
+对比五个模型的SBC和AIC数值，我们认为ARCH模型是最优的。因此，下文选择ARCH模型来估计投资组合的未来走势与市场风险。
+
+我们使用VaR和ES来描述模拟分布的市场风险，分别探讨了置信水平为99\%、95\%和90\%三种情况，最终得到使用GARCH模型进行蒙特卡洛模拟时，99\%置信水平下的单周收益率VaR=-22.05\%，对应的ES=-26.16\%；95\%置信水平下的单周收益率VaR=-15.17\%，对应的ES=-19.54\%；90\%置信水平下的单周收益率VaR=-11.80\%，对应的ES=-16.46\%。
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{7}{\boxspacing}
+\prompt{In}{incolor}{55}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{k}{def} \PY{n+nf}{kmv}\PY{p}{(}\PY{n}{r}\PY{p}{,} \PY{n}{sigma\PYZus{}e}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{equity}\PY{p}{,} \PY{n}{debt}\PY{p}{)}\PY{p}{:}
-    \PY{k}{def} \PY{n+nf}{option}\PY{p}{(}\PY{n}{w}\PY{p}{)}\PY{p}{:}
-        \PY{n}{x}\PY{p}{,} \PY{n}{sigma\PYZus{}a} \PY{o}{=} \PY{n}{w}
-        \PY{n}{N\PYZus{}d1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}
-            \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{o}{*} \PY{n}{equity} \PY{o}{/} \PY{n}{debt}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{r} \PY{o}{+} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{sigma\PYZus{}a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)} \PY{o}{*} \PY{n}{t}\PY{p}{)}
-            \PY{o}{/} \PY{p}{(}\PY{n}{sigma\PYZus{}a} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}
-        \PY{p}{)}
-        \PY{n}{N\PYZus{}d2} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}
-            \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{o}{*} \PY{n}{equity} \PY{o}{/} \PY{n}{debt}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{r} \PY{o}{\PYZhy{}} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{sigma\PYZus{}a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)} \PY{o}{*} \PY{n}{t}\PY{p}{)}
-            \PY{o}{/} \PY{p}{(}\PY{n}{sigma\PYZus{}a} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{)}
-        \PY{p}{)}
-        \PY{n}{e1} \PY{o}{=} \PY{n}{equity} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{x} \PY{o}{*} \PY{n}{equity} \PY{o}{*} \PY{n}{N\PYZus{}d1} \PY{o}{\PYZhy{}} \PY{n}{debt} \PY{o}{*} \PY{n}{N\PYZus{}d2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r} \PY{o}{*} \PY{n}{t}\PY{p}{)}\PY{p}{)}
-        \PY{n}{e2} \PY{o}{=} \PY{n}{sigma\PYZus{}e} \PY{o}{\PYZhy{}} \PY{n}{sigma\PYZus{}a} \PY{o}{*} \PY{n}{N\PYZus{}d1} \PY{o}{*} \PY{n}{x}
-        \PY{k}{return} \PY{p}{[}\PY{n}{e1}\PY{p}{,} \PY{n}{e2}\PY{p}{]}
+\PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{42}\PY{p}{)}
+\PY{n}{cases} \PY{o}{=} \PY{l+m+mi}{10000}
+\PY{k}{for} \PY{n}{case} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{cases}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{p}{(}\PY{n}{case}\PY{o}{*}\PY{l+m+mi}{10}\PY{p}{)} \PY{o}{\PYZpc{}} \PY{n}{cases} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{simulating}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{case}\PY{o}{/}\PY{n}{cases}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{sim\PYZus{}model} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{k+kc}{None}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{simulation} \PY{o}{=} \PY{n}{sim\PYZus{}model}\PY{o}{.}\PY{n}{simulate}\PY{p}{(}\PY{n}{garch}\PY{o}{.}\PY{n}{params}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}
+    \PY{n}{monte\PYZus{}carlo}\PY{p}{[}\PY{n}{case}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{prod}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{simulation}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
-    \PY{n}{assets}\PY{p}{,} \PY{n}{sigma\PYZus{}a} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{fsolve}\PY{p}{(}\PY{n}{option}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{,} \PY{n}{maxfev}\PY{o}{=}\PY{l+m+mi}{1000000000}\PY{p}{)}
-    \PY{n}{DD} \PY{o}{=} \PY{p}{(}\PY{n}{assets} \PY{o}{*} \PY{n}{equity} \PY{o}{\PYZhy{}} \PY{n}{debt}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{assets} \PY{o}{*} \PY{n}{equity} \PY{o}{*} \PY{n}{sigma\PYZus{}a}\PY{p}{)}
-    \PY{n}{EDF} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{DD}\PY{p}{)}
-    \PY{k}{return} \PY{n}{EDF}\PY{p}{,} \PY{n}{DD}
+    \begin{Verbatim}[commandchars=\\\{\}]
+simulating 0.0 \%
+simulating 10.0 \%
+simulating 20.0 \%
+simulating 30.0 \%
+simulating 40.0 \%
+simulating 50.0 \%
+simulating 60.0 \%
+simulating 70.0 \%
+simulating 80.0 \%
+simulating 90.0 \%
+    \end{Verbatim}
 
-
-\PY{n}{edf} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{result}\PY{p}{:}
-    \PY{n}{kmvmodel} \PY{o}{=} \PY{n}{kmv}\PY{p}{(}
-        \PY{l+m+mf}{0.03}\PY{p}{,}
-        \PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{V}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{pct\PYZus{}change}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{var}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{252}\PY{p}{,}
-        \PY{l+m+mi}{1}\PY{p}{,}
-        \PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{V}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
-        \PY{n}{result}\PY{p}{[}\PY{n}{company}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-    \PY{p}{)}
-    \PY{n}{edf}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{edf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{kmvmodel}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dd}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{n}{kmvmodel}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{\PYZcb{}}
-\PY{n}{edf} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{edf}\PY{p}{)}
-\PY{n}{edf}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}
+\PY{n}{var} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{)}
+\PY{n}{es} \PY{o}{=} \PY{n}{var}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{monte\PYZus{}carlo}\PY{p}{[}\PY{n}{monte\PYZus{}carlo} \PY{o}{\PYZlt{}} \PY{n}{x}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{es}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{es} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{var}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{var} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{7}{\boxspacing}
+\prompt{Out}{outcolor}{56}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-              比亚迪          三一重工          宁德时代
-edf  1.218997e-14  9.688509e-17  2.711517e-27
-dd  -7.625124e+00 -8.225876e+00 -1.075818e+01
-\end{Verbatim}
-\end{tcolorbox}
-
-    \hypertarget{ux7ec4ux5408ux7684ux8fddux7ea6ux6982ux7387}{%
-\subsection{组合的违约概率}\label{ux7ec4ux5408ux7684ux8fddux7ea6ux6982ux7387}}
-
-依据\cite{任宇航2006信用风险组合管理模型中的相关性问题研究述评}提出的算法，\(DD\)
-服从联合多元标准正态分布，且相关系数等于资产的相关系数，因而以下 code
-cell 分别为全部违约、两个公司违约、三个公司违约的概率
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{8}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{cov} \PY{o}{=} \PY{n}{rate}\PY{o}{.}\PY{n}{cov}\PY{p}{(}\PY{p}{)}
-\PY{n}{alldefault} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{multivariate\PYZus{}normal}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dd}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{cov}\PY{o}{=}\PY{n}{cov}\PY{p}{)}
-\PY{n}{alldefault}
-\end{Verbatim}
-\end{tcolorbox}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{8}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-0.0
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{9}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{twodefault} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{edf}\PY{p}{:}
-    \PY{n}{others} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{edf} \PY{k}{if} \PY{n}{i} \PY{o}{!=} \PY{n}{company}\PY{p}{]}
-    \PY{n}{others\PYZus{}edf} \PY{o}{=} \PY{n}{edf}\PY{p}{[}\PY{n}{others}\PY{p}{]}
-    \PY{n}{others\PYZus{}cov} \PY{o}{=} \PY{n}{cov}\PY{p}{[}\PY{n}{others}\PY{p}{]}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{others}\PY{p}{]}
-    \PY{n}{twodefault}\PY{p}{[}\PY{n+nb}{tuple}\PY{p}{(}\PY{n}{others}\PY{p}{)}\PY{p}{]} \PY{o}{=} \PY{p}{(}
-        \PY{n}{stats}\PY{o}{.}\PY{n}{multivariate\PYZus{}normal}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{others\PYZus{}edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dd}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{cov}\PY{o}{=}\PY{n}{others\PYZus{}cov}\PY{o}{.}\PY{n}{values}\PY{p}{)}
-        \PY{o}{\PYZhy{}} \PY{n}{alldefault}
-    \PY{p}{)}
-\PY{n}{twodefault}
-\end{Verbatim}
-\end{tcolorbox}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{9}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\{('三一重工', '宁德时代'): 0.0, ('比亚迪', '宁德时代'): 0.0, ('比亚迪', '三一重工'): 0.0\}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{10}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{onedefault} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{k}{for} \PY{n}{company} \PY{o+ow}{in} \PY{n}{edf}\PY{p}{:}
-    \PY{n}{others} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{edf} \PY{k}{if} \PY{n}{i} \PY{o}{!=} \PY{n}{company}\PY{p}{]}
-    \PY{n}{onedefault}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{=} \PY{p}{(}
-        \PY{n}{edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{edf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{company}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{alldefault} \PY{o}{\PYZhy{}} \PY{n}{twodefault}\PY{p}{[}\PY{n+nb}{tuple}\PY{p}{(}\PY{n}{others}\PY{p}{)}\PY{p}{]}
-    \PY{p}{)}
-\PY{n}{onedefault}
-\end{Verbatim}
-\end{tcolorbox}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{10}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\{'比亚迪': 1.2189968817781003e-14,
- '三一重工': 9.688508850070672e-17,
- '宁德时代': 2.711517235923103e-27\}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \hypertarget{ux8d37ux6b3eux6bd4ux4f8bux4e0eux4fe1ux7528ux98ceux9669}{%
-\subsection{贷款比例与信用风险}\label{ux8d37ux6b3eux6bd4ux4f8bux4e0eux4fe1ux7528ux98ceux9669}}
-
-利用以上的结果，我们以贷款给这三家公司的期望收益为标准，选择期望收益最大化的贷款分配比例。由于违约概率都很小，贷款的
-\(VaR\)
-指导意义较弱，因而我们选择最大化期望收益。最终的结果是100\%宁德时代，以获得最高的期望收益。
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{11}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{zerodefault} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{alldefault} \PY{o}{\PYZhy{}} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{twodefault}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{onedefault}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{return\PYZus{}rate} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{1.03}\PY{o}{+}\PY{n}{edf}\PY{o}{.}\PY{n}{T}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{edf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{*} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
-\PY{k}{def} \PY{n+nf}{expected\PYZus{}return}\PY{p}{(}\PY{n}{case}\PY{p}{)}\PY{p}{:}
-    \PY{n}{case} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{比亚迪}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三一重工}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{case}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{宁德时代}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}
-    \PY{n}{final} \PY{o}{=} \PY{p}{(}
-        \PY{n}{alldefault} \PY{o}{*} \PY{l+m+mi}{0}
-        \PY{o}{+} \PY{n+nb}{sum}\PY{p}{(}
-            \PY{p}{[}
-                \PY{n}{twodefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
-                \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{twodefault}
-                \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{onedefault}
-                \PY{k}{if} \PY{n}{j} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{i}
-            \PY{p}{]}
-        \PY{p}{)}
-        \PY{o}{+} \PY{n+nb}{sum}\PY{p}{(}
-            \PY{p}{[}
-                \PY{n}{onedefault}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{j}\PY{p}{]}
-                \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{onedefault}
-                \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{onedefault}
-                \PY{k}{if} \PY{n}{j} \PY{o}{!=} \PY{n}{i}
-            \PY{p}{]}
-        \PY{p}{)}
-        \PY{o}{+} \PY{n}{zerodefault} \PY{o}{*} \PY{n+nb}{sum}\PY{p}{(}\PY{p}{[}\PY{n}{return\PYZus{}rate}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{n}{case}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{onedefault}\PY{p}{]}\PY{p}{)}
-    \PY{p}{)}
-    \PY{k}{return} \PY{o}{\PYZhy{}}\PY{n}{final}
-
-
-\PY{n}{case} \PY{o}{=} \PY{n}{optimize}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}
-    \PY{n}{expected\PYZus{}return}\PY{p}{,}
-    \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
-    \PY{n}{constraints}\PY{o}{=}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{eq}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fun}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{,}
-    \PY{n}{bounds}\PY{o}{=}\PY{p}{[}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]} \PY{o}{*} \PY{l+m+mi}{3}\PY{p}{,}
-\PY{p}{)}\PY{o}{.}\PY{n}{x}
-\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{比亚迪}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三一重工}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{case}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{宁德时代}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{case}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}
-\end{Verbatim}
-\end{tcolorbox}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{11}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\{'比亚迪': 0.0, '三一重工': 0.0, '宁德时代': 1.0\}
+            es       var
+0.01 -0.499970 -0.427457
+0.05 -0.379925 -0.300438
+0.10 -0.323582 -0.241536
 \end{Verbatim}
 \end{tcolorbox}
 
