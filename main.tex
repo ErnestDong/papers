@@ -1,852 +1,111 @@
-\documentclass[11pt]{article}
-\title{风管模型第四次作业}
-\author{董晨阳 \and 李昭伦}
-\usepackage{xeCJK}
-    \usepackage[breakable]{tcolorbox}
-    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
-
-
-    % Basic figure setup, for now with no caption control since it's done
-    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
-    \usepackage{graphicx}
-    % Maintain compatibility with old templates. Remove in nbconvert 6.0
-    \let\Oldincludegraphics\includegraphics
-    % Ensure that by default, figures have no caption (until we provide a
-    % proper Figure object with a Caption API and a way to capture that
-    % in the conversion process - todo).
-    \usepackage{caption}
-    \DeclareCaptionFormat{nocaption}{}
-    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
-
-    \usepackage{float}
-    \floatplacement{figure}{H} % forces figures to be placed at the correct location
-    \usepackage{xcolor} % Allow colors to be defined
-    \usepackage{enumerate} % Needed for markdown enumerations to work
-    \usepackage{geometry} % Used to adjust the document margins
-    \usepackage{amsmath} % Equations
-    \usepackage{amssymb} % Equations
-    \usepackage{textcomp} % defines textquotesingle
-    % Hack from http://tex.stackexchange.com/a/47451/13684:
-    \AtBeginDocument{%
-        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
-    }
-    \usepackage{upquote} % Upright quotes for verbatim code
-    \usepackage{eurosym} % defines \euro
-
-    \usepackage{iftex}
-    \ifPDFTeX
-        \usepackage[T1]{fontenc}
-        \IfFileExists{alphabeta.sty}{
-              \usepackage{alphabeta}
-          }{
-              \usepackage[mathletters]{ucs}
-              \usepackage[utf8x]{inputenc}
-          }
-    \else
-        \usepackage{fontspec}
-        \usepackage{unicode-math}
-    \fi
-
-    \usepackage{fancyvrb} % verbatim replacement that allows latex
-    \usepackage{grffile} % extends the file name processing of package graphics
-                         % to support a larger range
-    \makeatletter % fix for old versions of grffile with XeLaTeX
-    \@ifpackagelater{grffile}{2019/11/01}
-    {
-      % Do nothing on new versions
-    }
-    {
-      \def\Gread@@xetex#1{%
-        \IfFileExists{"\Gin@base".bb}%
-        {\Gread@eps{\Gin@base.bb}}%
-        {\Gread@@xetex@aux#1}%
-      }
-    }
-    \makeatother
-    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
-    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
-
-    % The hyperref package gives us a pdf with properly built
-    % internal navigation ('pdf bookmarks' for the table of contents,
-    % internal cross-reference links, web links for URLs, etc.)
-    \usepackage{hyperref}
-    % The default LaTeX title has an obnoxious amount of whitespace. By default,
-    % titling removes some of it. It also provides customization options.
-    \usepackage{titling}
-    \usepackage{longtable} % longtable support required by pandoc >1.10
-    \usepackage{booktabs}  % table support for pandoc > 1.12.2
-    \usepackage{array}     % table support for pandoc >= 2.11.3
-    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
-    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
-    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
-                                % normalem makes italics be italics, not underlines
-    \usepackage{mathrsfs}
-
-
-
-    % Colors for the hyperref package
-    \definecolor{urlcolor}{rgb}{0,.145,.698}
-    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
-    \definecolor{citecolor}{rgb}{.12,.54,.11}
-
-    % ANSI colors
-    \definecolor{ansi-black}{HTML}{3E424D}
-    \definecolor{ansi-black-intense}{HTML}{282C36}
-    \definecolor{ansi-red}{HTML}{E75C58}
-    \definecolor{ansi-red-intense}{HTML}{B22B31}
-    \definecolor{ansi-green}{HTML}{00A250}
-    \definecolor{ansi-green-intense}{HTML}{007427}
-    \definecolor{ansi-yellow}{HTML}{DDB62B}
-    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
-    \definecolor{ansi-blue}{HTML}{208FFB}
-    \definecolor{ansi-blue-intense}{HTML}{0065CA}
-    \definecolor{ansi-magenta}{HTML}{D160C4}
-    \definecolor{ansi-magenta-intense}{HTML}{A03196}
-    \definecolor{ansi-cyan}{HTML}{60C6C8}
-    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
-    \definecolor{ansi-white}{HTML}{C5C1B4}
-    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
-    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
-    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
-
-    % common color for the border for error outputs.
-    \definecolor{outerrorbackground}{HTML}{FFDFDF}
-
-    % commands and environments needed by pandoc snippets
-    % extracted from the output of `pandoc -s`
-    \providecommand{\tightlist}{%
-      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-    % Add ',fontsize=\small' for more characters per line
-    \newenvironment{Shaded}{}{}
-    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
-    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
-    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
-    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
-    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
-    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
-    \newcommand{\RegionMarkerTok}[1]{{#1}}
-    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
-    \newcommand{\NormalTok}[1]{{#1}}
-
-    % Additional commands for more recent versions of Pandoc
-    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
-    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
-    \newcommand{\ImportTok}[1]{{#1}}
-    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
-    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
-    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
-    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
-    \newcommand{\BuiltInTok}[1]{{#1}}
-    \newcommand{\ExtensionTok}[1]{{#1}}
-    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
-    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
-    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-
-
-    % Define a nice break command that doesn't care if a line doesn't already
-    % exist.
-    \def\br{\hspace*{\fill} \\* }
-    % Math Jax compatibility definitions
-    \def\gt{>}
-    \def\lt{<}
-    \let\Oldtex\TeX
-    \let\Oldlatex\LaTeX
-    \renewcommand{\TeX}{\textrm{\Oldtex}}
-    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
-    % Document parameters
-    % Document title
-
-
-
-
-
-
-% Pygments definitions
-\makeatletter
-\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
-    \let\PY@ul=\relax \let\PY@tc=\relax%
-    \let\PY@bc=\relax \let\PY@ff=\relax}
-\def\PY@tok#1{\csname PY@tok@#1\endcsname}
-\def\PY@toks#1+{\ifx\relax#1\empty\else%
-    \PY@tok{#1}\expandafter\PY@toks\fi}
-\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
-    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
-\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
-
-\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
-\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
-\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
-\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
-\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
-\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
-\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
-\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
-\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
-\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
-\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
-\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
-\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
-\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
-\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
-\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
-\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
-\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
-\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
-\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
-\@namedef{PY@tok@ge}{\let\PY@it=\textit}
-\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
-\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
-\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
-\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
-\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
-\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
-\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
-\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
-\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
-\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
-
-\def\PYZbs{\char`\\}
-\def\PYZus{\char`\_}
-\def\PYZob{\char`\{}
-\def\PYZcb{\char`\}}
-\def\PYZca{\char`\^}
-\def\PYZam{\char`\&}
-\def\PYZlt{\char`\<}
-\def\PYZgt{\char`\>}
-\def\PYZsh{\char`\#}
-\def\PYZpc{\char`\%}
-\def\PYZdl{\char`\$}
-\def\PYZhy{\char`\-}
-\def\PYZsq{\char`\'}
-\def\PYZdq{\char`\"}
-\def\PYZti{\char`\~}
-% for compatibility with earlier versions
-\def\PYZat{@}
-\def\PYZlb{[}
-\def\PYZrb{]}
-\makeatother
-
-
-    % For linebreaks inside Verbatim environment from package fancyvrb.
-    \makeatletter
-        \newbox\Wrappedcontinuationbox
-        \newbox\Wrappedvisiblespacebox
-        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
-        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
-        \newcommand*\Wrappedcontinuationindent {3ex }
-        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
-        % Take advantage of the already applied Pygments mark-up to insert
-        % potential linebreaks for TeX processing.
-        %        {, <, #, %, $, ' and ": go to next line.
-        %        _, }, ^, &, >, - and ~: stay at end of broken line.
-        % Use of \textquotesingle for straight quote.
-        \newcommand*\Wrappedbreaksatspecials {%
-            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
-            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
-            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
-            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
-            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
-            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
-            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
-            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
-            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
-            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
-            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
-            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
-            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
-            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
-        }
-        % Some characters . , ; ? ! / are not pygmentized.
-        % This macro makes them "active" and they will insert potential linebreaks
-        \newcommand*\Wrappedbreaksatpunct {%
-            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
-            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
-            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
-            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
-            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
-            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
-            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
-            \catcode`\.\active
-            \catcode`\,\active
-            \catcode`\;\active
-            \catcode`\:\active
-            \catcode`\?\active
-            \catcode`\!\active
-            \catcode`\/\active
-            \lccode`\~`\~
-        }
-    \makeatother
-
-    \let\OriginalVerbatim=\Verbatim
-    \makeatletter
-    \renewcommand{\Verbatim}[1][1]{%
-        %\parskip\z@skip
-        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
-        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
-        \def\FancyVerbFormatLine ##1{\hsize\linewidth
-            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
-                \doublehyphendemerits\z@\finalhyphendemerits\z@
-                \strut ##1\strut}%
-        }%
-        % If the linebreak is at a space, the latter will be displayed as visible
-        % space at end of first line, and a continuation symbol starts next line.
-        % Stretch/shrink are however usually zero for typewriter font.
-        \def\FV@Space {%
-            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
-            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
-            {\kern\fontdimen2\font}%
-        }%
-
-        % Allow breaks at special characters using \PYG... macros.
-        \Wrappedbreaksatspecials
-        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
-        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
-    }
-    \makeatother
-
-    % Exact colors from NB
-    \definecolor{incolor}{HTML}{303F9F}
-    \definecolor{outcolor}{HTML}{D84315}
-    \definecolor{cellborder}{HTML}{CFCFCF}
-    \definecolor{cellbackground}{HTML}{F7F7F7}
-
-    % prompt
-    \makeatletter
-    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
-    \makeatother
-    \newcommand{\prompt}[4]{
-        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
-    }
-
-
-
-    % Prevent overflowing lines due to hard-to-break entities
-    \sloppy
-    % Setup hyperref package
-    \hypersetup{
-      breaklinks=true,  % so long urls are correctly broken across lines
-      colorlinks=true,
-      urlcolor=urlcolor,
-      linkcolor=linkcolor,
-      citecolor=citecolor,
-      }
-    % Slightly bigger margins than the latex defaults
-
-    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-
-
+\documentclass[a4paper,12pt]{ctexart}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{svg}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage[style=gb7714-2015ay]{biblatex}
+\addbibresource{ref.bib}
+\setcounter{secnumdepth}{0}
+\title{区域政府竞争与地方经济发展：国际经验与启示}
+\author{董晨阳}
+\date{\today}
 
 \begin{document}
+\maketitle
+\begin{abstract}
+    本论文探讨了区域政府竞争对地方经济发展的影响，结合国际经验，旨在提供对地方政府政策制定者和经济学家的有价值的启示。区域政府竞争是当今全球经济中备受关注的议题，因为它不仅涉及到地方政府间的竞争，还关系到整个国家和全球经济的繁荣。我们的研究旨在深入了解区域政府竞争的机制，以及这种竞争如何影响地方经济的发展。
 
-    \maketitle
+    本论文通过深入研究区域政府竞争与地方经济发展之间的关系，为政府政策制定者和经济学家提供了有价值的洞见。我们强调了政府竞争的潜在好处，但也警示了可能的负面影响。通过充分了解政府竞争的机制和国际经验，地方政府可以更明智地制定政策，以促进经济增长，创造更加繁荣的地方社区。
+\end{abstract}
+\section*{引言}
+区域政府竞争已成为当今全球经济研究\citep{陈云贤2017区域政府竞争}中备受瞩目的话题。在不同国家和地区，政府实体之间的竞争越来越引人关注，因为它对地方经济发展和国家整体经济状况产生重要影响。政府竞争指的是地方政府之间为了吸引投资、提高就业率和创造创新机会而采取的政策和行动，以吸引企业和人才。这种竞争不仅发生在国际层面，还在国内不同地区之间产生了激烈的竞争，如美国各州之间的税收政策竞争、中国的特区政策和欧洲的地方政府合作。
 
+政府竞争的动机复杂多样，包括提高地方经济繁荣、增加政府税收收入、吸引外资、创造就业机会以及提高人民生活水平。然而，政府竞争也存在一些潜在问题，如资源分配不均、财政浪费和不平等的增加。因此，深入研究政府竞争的机制和效应对于政府政策制定者和经济学家来说至关重要。
 
+本论文的目的是通过分析国际经验，探讨政府竞争对地方经济发展的影响，并提供实践建议和政策启示。我们将通过国际案例研究，包括中国特区政策、美国州际竞争和欧洲地方政府合作，来阐释政府竞争的不同形式和效应。我们还将总结国际经验中的启示，以帮助地方政府更好地应对政府竞争的挑战，确保其对经济发展产生积极影响。
 
+首先，本文从理论角度分析了区域政府竞争的概念和动机。我们讨论了不同地方政府之间的竞争如何激发创新、提高效率和吸引资本投资。同时，我们也研究了激烈的政府间竞争可能导致资源分配不均和财政浪费的潜在风险。通过分析理论框架，我们可以更好地理解政府竞争的复杂性和影响。
 
-    \hypertarget{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}{%
-\label{ux98ceux7ba1ux6a21ux578bux7b2cux56dbux6b21ux4f5cux4e1a}}
+其次，我们通过国际案例研究来展示不同国家和地区的政府竞争经验。我们以中国的特区政策、美国的州际竞争、欧洲的地方政府合作为例，分析它们在地方经济发展中的作用和效果。这些案例研究揭示了政府竞争如何推动经济增长、创造就业机会，以及促进创新和科技发展。同时，它们也揭示了政府竞争可能导致的财政浪费和不平等问题。
 
-股票市场的走势是一个国家经济状况的``晴雨表''。长久以来，此领域一直是众多学者的研究重点。目前，预测股票价格走势的方法多种多样，但是均存在对股票价格的波动拟合效果较差、预测精度有限等问题。时间序列模型具有应用范围广、限制要求少、短期预测准确率高等优点，借此，它成为了金融预测领域较受欢迎的预测模型之一。
+最后，本文总结了国际经验中的启示，以帮助地方政府和政策制定者更好地应对区域政府竞争的挑战。我们强调了透明度、财政管理、合作机制的重要性，以确保政府竞争不仅促进经济增长，还能够平衡资源分配，减少不平等。我们还提出了一些建议，如建立绩效评估机制、制定竞争政策指导原则，以帮助政府更有效地参与竞争并最大化经济利益。
 
-时间序列分析是一种主要用于描述和探究某一现象随时间的发展如何变化的分析方法。时间序列是同一种现象在不同时间上的相继观察值排列而成的一组数字序列。人们运用时间序列的历史数据，揭示现象随时间变化的规律并将这种规律延伸到未来，从而对该现象的未来做出预测。
+通过本论文的研究，我们希望为政府政策制定者、经济学家和研究者提供有关政府竞争与地方经济发展的有价值见解，以帮助他们更好地应对当今全球化经济中的挑战。
+\section{国际案例研究}
 
-本文运用时间序列分析方法，使用LN、AR、ARCH、GARCH、RSLN-2五个模型对样本数据进行拟合，计算对数似然函数的最大值以及AIC和SBC，比较不同模型的拟合效果，并对沪深300指数未来的走势进行预判。
+在本部分，我们将深入研究国际经验中的政府竞争案例，包括中国的特区政策、美国的州际竞争以及欧洲的地方政府合作。这些案例提供了宝贵的见解，帮助我们了解政府竞争的不同形式和效应。
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{48}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
-\PY{k+kn}{from} \PY{n+nn}{arch} \PY{k+kn}{import} \PY{n}{arch\PYZus{}model}
-\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{chi2}
-\PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{arima}\PY{n+nn}{.}\PY{n+nn}{model} \PY{k+kn}{import} \PY{n}{ARIMA}
-\PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{tsa}\PY{n+nn}{.}\PY{n+nn}{regime\PYZus{}switching}\PY{n+nn}{.}\PY{n+nn}{markov\PYZus{}regression} \PY{k+kn}{import} \PY{n}{MarkovRegression}
+\subsection{中国特区政策的案例研究}
 
-\PY{c+c1}{\PYZsh{} print(\PYZdq{}importing done\PYZdq{})}
-\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimHei}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{k+kc}{False}
-\PY{n}{result} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{df} \PY{o}{=} \PY{p}{(}
-    \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{./lib/创业板指.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{skipfooter}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
-    \PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
-    \PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{代码}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{名称}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
-\PY{p}{)}
-\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
-    \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{dtype} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{object}\PY{l+s+s2}{\PYZdq{}} \PY{k}{else} \PY{n}{x}
-\PY{p}{)}
-\PY{n}{df}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{p}{)}
-\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weeknum}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{year}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{isocalendar}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{week}\PY{p}{)}\PY{p}{)}
-\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
-\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
-\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(收益率)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kde}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
+中国的特区政策是政府竞争的一个杰出例子。自上世纪80年代以来，中国政府创建了一系列特殊经济区域，如深圳、上海浦东新区和珠海等，以吸引国内外投资和促进经济增长。这些特区政策为地方政府提供了更大的政策灵活性，以制定吸引外资的政策，包括税收减免、土地使用权和产权制度改革。结果，这些特区迅速成为中国经济增长的引擎，吸引了大量国内外企业和投资。
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{48}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-<Axes: ylabel='Density'>
-\end{Verbatim}
-\end{tcolorbox}
+中国的特区政策的成功经验表明政府竞争可以激发经济增长和吸引外资。这些特区成为吸引国内外企业和投资的热点地区，促进了创新和技术发展。然而，这也引发了一些问题，包括资源分配不均和环境污染。政府需要谨慎权衡吸引外资和保护环境的利益。这一案例强调了政府竞争的复杂性，以及其在经济发展中的关键作用。
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{main_files/main_1_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
+\subsection{美国州际竞争的案例研究}
 
-    \hypertarget{ux7b2cux4e00ux9898}{%
-\section{第一题}\label{ux7b2cux4e00ux9898}}
+美国各州之间的税收政策竞争提供了另一个有趣的案例。不同州之间竞争降低了企业税率、提供税收折扣以吸引公司迁址或扩张。这种竞争也涉及到吸引高技能劳动力和投资。例如，德克萨斯州以其低税率和企业友好环境吸引了许多高科技公司和初创企业，促进了创新和就业增长。
 
-\hypertarget{ln-ux6a21ux578b}{%
-\subsection{LN 模型}\label{ln-ux6a21ux578b}}
+美国州际竞争的案例表明政府竞争不仅发生在国际层面，也在国内各州之间激烈展开。各州争相制定政策，以吸引企业、创造就业机会和促进经济增长。然而，这种竞争也引发了一些质疑，包括财政浪费和社会福利问题。政府需要谨慎管理竞争，以确保其不会导致不公平的资源分配或财政问题。
 
-我们依据\cite{wang2020corrected} 提出的算法，对 Lognormal
-模型进行最大似然估计，即
+\subsection{欧洲地方政府合作的案例研究}
 
-\[
-\log(L) = -\sum_{i=1}^n\log x_i-n\log\sigma-\frac{n}{2}\log 2\pi - \sum_{i=11^n}\frac{(\log x_i-\mu)^2}{2\sigma^2}
-\]
+在欧洲，地方政府合作提供了另一种政府竞争的模型。欧洲各国的地方政府通常采取协同的方式，共同制定政策和吸引投资。例如，欧洲联盟的结构鼓励了跨国合作，以共同解决跨国问题，如交通和环境保护。这种合作有助于提高地区的竞争力，吸引国际投资和提高地区的创新水平。
 
-采用样本均值 \(\hat\mu\) 和样本方差 \(\hat\sigma^2\) 代入计算
-\(AIC\)、\(SBC\)，得到的结果如下表所示
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{49}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{c+c1}{\PYZsh{} df[\PYZdq{}weeknum\PYZdq{}] = df.index.map(lambda x: str(x.year) + \PYZdq{}\PYZhy{}\PYZdq{} + str(x.isocalendar().week))}
-\PY{c+c1}{\PYZsh{} df = df.drop\PYZus{}duplicates(subset=\PYZdq{}weeknum\PYZdq{}, keep=\PYZdq{}last\PYZdq{})}
-\PY{n}{log} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{收盘价(元)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{)}
-\PY{n}{mu} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-\PY{n}{sigma} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
-\PY{n}{likelyhood\PYZus{}ln} \PY{o}{=} \PY{n}{log}\PY{o}{.}\PY{n}{apply}\PY{p}{(}
-    \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{sigma}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{mu}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
-\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
-\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{likelyhood\PYZus{}ln}
-\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LN}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
-\PY{p}{\PYZcb{}}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{49}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-            AIC          SBC    k       log(L)
-LN  1180.436168  1175.934878  2.0  1182.436168
-\end{Verbatim}
-\end{tcolorbox}
-
-    \hypertarget{ar1-ux6a21ux578b}{%
-\subsection{AR(1) 模型}\label{ar1-ux6a21ux578b}}
-
-自回归模型（AR）是最简单的时间序列处理方法，对LogNormal的改进在于考虑了变量之间的相关性，用过去随机变量的情况来描述未来该随机变量的取值。在自回归模型假设下，随机变量的取值总会向长期均值靠拢。我们选择一阶自回归模型对样本数据进行拟合，函数表达式为
-\[Y_t=\mu+\alpha(Y_{t-1}-\mu)+\sigma\varepsilon_t\] 其中
-\(\alpha\in(-1,1)\) ，\(\varepsilon_t\)
-为相互独立且符合标准正态分布的白噪声过程。
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{50}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{model} \PY{o}{=} \PY{n}{ARIMA}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
-\PY{n}{AR1} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
-\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{AR1}\PY{o}{.}\PY{n}{llf}
-\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AR(1)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
-\PY{p}{\PYZcb{}}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{AR1}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-                               SARIMAX Results
-==============================================================================
-Dep. Variable:                      y   No. Observations:                  666
-Model:                 ARIMA(1, 0, 0)   Log Likelihood                1183.091
-Date:                Wed, 07 Jun 2023   AIC                          -2360.182
-Time:                        16:46:57   BIC                          -2346.678
-Sample:                             0   HQIC                         -2354.950
-                                - 666
-Covariance Type:                  opg
-==============================================================================
-                 coef    std err          z      P>|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-const          0.0011      0.002      0.633      0.527      -0.002       0.004
-ar.L1          0.0442      0.031      1.450      0.147      -0.016       0.104
-sigma2         0.0017   7.24e-05     23.157      0.000       0.002       0.002
-================================================================================
-===
-Ljung-Box (L1) (Q):                   0.01   Jarque-Bera (JB):
-85.37
-Prob(Q):                              0.93   Prob(JB):
-0.00
-Heteroskedasticity (H):               0.77   Skew:
--0.49
-Prob(H) (two-sided):                  0.05   Kurtosis:
-4.46
-================================================================================
-===
-
-Warnings:
-[1] Covariance matrix calculated using the outer product of gradients (complex-
-step).
-    \end{Verbatim}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{50}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-         k       log(L)          AIC          SBC
-LN     2.0  1182.436168  1180.436168  1175.934878
-AR(1)  3.0  1183.090866  1180.090866  1173.338932
-\end{Verbatim}
-\end{tcolorbox}
-
-    自回归方法的优点是所需资料不多，可用自身变数数列来进行预测。但是这种方法受到一定的限制：必须具有自相关，自相关系数是关键。如果自相关系数(R)小于0.5，则不宜采用，否则预测结果极不准确。自回归只能适用于预测与自身前期相关的经济现象，即受自身历史因素影响较大的经济现象，如矿的开采量，各种自然资源产量等；对于受社会因素影响较大的经济现象，不宜采用自回归，而应改采可纳入其他变数的向量自回归模型。
-
-\hypertarget{arch-ux6a21ux578b}{%
-\subsection{ARCH 模型}\label{arch-ux6a21ux578b}}
-
-ARCH模型即自回归条件异方差模型，是一种用来处理时间序列的模型。在股票中，ARCH可以用来预测股票的波动率，从而控制风险。粗略地说，该模型将当前一切可利用信息作为条件，并采用某种自回归形式来刻画方差的变异，对于一个时间序列而言，在不同时刻可利用的信息不同，而相应的条件方差也不同，利用ARCH模型，可以刻画出随时间而变异的条件方差。ARCH模型解决了LogNormal和AR被诟病的波动率恒定问题。这里我们同样使用一阶条件异方差模型对样本数据进行拟合，函数表达式为
-\[Y_t=\mu+\sigma_t \varepsilon_t\] 其中
-\(\sigma_t^2=a_0+a_1(Y_(t-1)-\mu)^2\)。
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{51}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{arch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{arch}\PY{o}{.}\PY{n}{loglikelihood}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{arch}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ARCH}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
-\PY{p}{\PYZcb{}}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-Optimization terminated successfully    (Exit mode 0)
-            Current function value: -1160.4776946315305
-            Iterations: 6
-            Function evaluations: 14
-            Gradient evaluations: 2
-                      Constant Mean - ARCH Model Results
-==============================================================================
-Dep. Variable:                 收盘价(元)   R-squared:                       0.000
-Mean Model:             Constant Mean   Adj. R-squared:                  0.000
-Vol Model:                       ARCH   Log-Likelihood:                1160.48
-Distribution:                  Normal   AIC:                          -2314.96
-Method:            Maximum Likelihood   BIC:                          -2301.45
-                                        No. Observations:                  666
-Date:                Wed, Jun 07 2023   Df Residuals:                      665
-Time:                        16:46:57   Df Model:                            1
-                                  Mean Model
-=============================================================================
-                 coef    std err          t      P>|t|       95.0\% Conf. Int.
------------------------------------------------------------------------------
-mu         8.5403e-04  1.679e-03      0.509      0.611 [-2.437e-03,4.145e-03]
-                              Volatility Model
-============================================================================
-                 coef    std err          t      P>|t|      95.0\% Conf. Int.
-----------------------------------------------------------------------------
-omega      8.4019e-04  6.573e-05     12.782  2.055e-37 [7.114e-04,9.690e-04]
-alpha[1]       0.2000  4.359e-02      4.589  4.460e-06     [  0.115,  0.285]
-============================================================================
-
-Covariance estimator: robust
-    \end{Verbatim}
-
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{51}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-         k       log(L)          AIC          SBC
-LN     2.0  1182.436168  1180.436168  1175.934878
-AR(1)  3.0  1183.090866  1180.090866  1173.338932
-ARCH   3.0  1160.477695  1157.477695  1150.725760
-\end{Verbatim}
-\end{tcolorbox}
-
-    \hypertarget{garch-ux6a21ux578b}{%
-\subsection{GARCH 模型}\label{garch-ux6a21ux578b}}
-
-GARCH模型，即广义ARCH模型，它是对ARCH模型的进一步扩展。它同时考虑了序列相关和条件方差，对误差的方差进行了进一步建模，具有更强的灵活性。本文选择
-\(GARCH(1,1)\) 模型对历史数据进行拟合。
+欧洲地方政府合作的案例表明政府合作可以是政府竞争的一种形式，通过合作共赢的方式提高地区的竞争力。然而，这种合作也面临一些挑战，如不同地区之间的政策差异和文化差异。政府需要谨慎协调和合作，以确保合作能够带来经济效益。
 
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{52}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{garch} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{n}{log}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{rescale}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{update\PYZus{}freq}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,} \PY{n}{garch}\PY{o}{.}\PY{n}{loglikelihood}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{garch}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GARCH}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
-\PY{p}{\PYZcb{}}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
+\section{国际经验中的启示}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-Optimization terminated successfully    (Exit mode 0)
-            Current function value: -1228.8837666021368
-            Iterations: 14
-            Function evaluations: 101
-            Gradient evaluations: 13
-                     Constant Mean - GARCH Model Results
-==============================================================================
-Dep. Variable:                 收盘价(元)   R-squared:                       0.000
-Mean Model:             Constant Mean   Adj. R-squared:                  0.000
-Vol Model:                      GARCH   Log-Likelihood:                1228.88
-Distribution:                  Normal   AIC:                          -2449.77
-Method:            Maximum Likelihood   BIC:                          -2431.76
-                                        No. Observations:                  666
-Date:                Wed, Jun 07 2023   Df Residuals:                      665
-Time:                        16:46:58   Df Model:                            1
-                                  Mean Model
-==============================================================================
-                  coef    std err          t      P>|t|       95.0\% Conf. Int.
-------------------------------------------------------------------------------
-mu         -1.3192e-04  1.358e-03 -9.714e-02      0.923 [-2.794e-03,2.530e-03]
-                              Volatility Model
-============================================================================
-                 coef    std err          t      P>|t|      95.0\% Conf. Int.
-----------------------------------------------------------------------------
-omega      5.4685e-05  2.549e-05      2.146  3.190e-02 [4.733e-06,1.046e-04]
-alpha[1]       0.1100  2.725e-02      4.036  5.444e-05   [5.656e-02,  0.163]
-beta[1]        0.8561  3.537e-02     24.206 1.927e-129     [  0.787,  0.925]
-============================================================================
+通过深入研究国际案例，我们可以得出一些关于政府竞争与地方经济发展的重要启示。这些启示有助于政府政策制定者更好地理解政府竞争的机制，以及如何利用它来促进经济增长和社会繁荣。
 
-Covariance estimator: robust
-    \end{Verbatim}
+\subsection{政府竞争的潜在优势}
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{52}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-         k       log(L)          AIC          SBC
-LN     2.0  1182.436168  1180.436168  1175.934878
-AR(1)  3.0  1183.090866  1180.090866  1173.338932
-ARCH   3.0  1160.477695  1157.477695  1150.725760
-GARCH  4.0  1228.883767  1224.883767  1215.881187
-\end{Verbatim}
-\end{tcolorbox}
+国际经验表明，政府竞争可以激发经济增长、创造就业机会和吸引投资\citep{曹文超2019地方政府竞争与区域经济协调发展}。例如，中国的特区政策和美国的州际竞争都为吸引外资和提高就业率提供了有效的机制。政府竞争可以激发地方政府采取创新政策，以吸引企业和人才，从而推动经济繁荣。
 
-    \hypertarget{rsln-2}{%
-\subsection{RSLN-2}\label{rsln-2}}
+\subsection{财政管理和透明度的重要性}
 
-RSLN
-模型本质是马尔可夫状态转移模型，因而我们参考\href{https://www.statsmodels.org/dev/generated/statsmodels.tsa.regime_switching.markov_regression.MarkovRegression.html}{statsmodels
-文档}，令两 regime
-分布异方差，回归结果如下表，显示异方差的确存在(不同状态下的方差影响显著)。
+尽管政府竞争可以带来很多好处，但它也可能导致资源分配不均和财政浪费。因此，财政管理和透明度是确保政府竞争有效的关键因素。政府需要制定财政政策，以确保资源分配公平和高效。透明度和问责制也可以帮助防止财政滥用和不当行为。
 
-同样，我们提取似然函数对数，并计算 \(AIC\)、\(SBC\)
+\subsection{减少不平等和资源分配问题}
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{53}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{rsln} \PY{o}{=} \PY{n}{MarkovRegression}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{switching\PYZus{}variance}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 异方差}
-\PY{n}{k}\PY{p}{,} \PY{n}{logl} \PY{o}{=} \PY{l+m+mi}{6}\PY{p}{,} \PY{n}{rsln}\PY{o}{.}\PY{n}{llf}
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{rsln}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{result}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RSLN\PYZhy{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{log(L)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AIC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k}\PY{p}{,}
-    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SBC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{logl} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{log}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,}
-\PY{p}{\PYZcb{}}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
+政府竞争可能导致不同地区之间的不平等问题，因为一些地方政府可能更能吸引投资和资本，而其他地方则可能被边缘化。政府需要采取政策措施，以减轻这种不平等，并确保资源分配更加均匀。这可以通过建立国家或地区层面的资源分配机制来实现。
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-                        Markov Switching Model Results
-==============================================================================
-Dep. Variable:                      y   No. Observations:                  666
-Model:               MarkovRegression   Log Likelihood                1220.002
-Date:                Wed, 07 Jun 2023   AIC                          -2428.005
-Time:                        16:46:58   BIC                          -2400.997
-Sample:                             0   HQIC                         -2417.541
-                                - 666
-Covariance Type:               approx
-                             Regime 0 parameters
-==============================================================================
-                 coef    std err          z      P>|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-const          0.0014      0.001      0.935      0.350      -0.002       0.004
-sigma2         0.0012   8.76e-05     14.079      0.000       0.001       0.001
-                             Regime 1 parameters
-==============================================================================
-                 coef    std err          z      P>|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-const         -0.0015      0.010     -0.152      0.879      -0.021       0.018
-sigma2         0.0056      0.001      4.974      0.000       0.003       0.008
-                         Regime transition parameters
-==============================================================================
-                 coef    std err          z      P>|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-p[0->0]        0.9945      0.005    201.920      0.000       0.985       1.004
-p[1->0]        0.0379      0.037      1.032      0.302      -0.034       0.110
-==============================================================================
+\subsection{制定竞争政策指导原则}
 
-Warnings:
-[1] Covariance matrix calculated using numerical (complex-step) differentiation.
-    \end{Verbatim}
+基于国际经验，政府竞争需要明确的政策指导原则，以确保政府之间的竞争是有益的。这些指导原则可以包括合作框架的建立、资源分配机制的制定、财政政策的调整等。政府需要制定政策来平衡吸引投资和保护社会公共利益。
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{53}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-          k       log(L)          AIC          SBC
-LN      2.0  1182.436168  1180.436168  1175.934878
-AR(1)   3.0  1183.090866  1180.090866  1173.338932
-ARCH    3.0  1160.477695  1157.477695  1150.725760
-GARCH   4.0  1228.883767  1224.883767  1215.881187
-RSLN-2  6.0  1220.002313  1214.002313  1200.498444
-\end{Verbatim}
-\end{tcolorbox}
+\section{政府竞争与地方经济发展的实践建议}
 
-    \hypertarget{ux7efcux5408ux6bd4ux8f83}{%
-\subsection{综合比较}\label{ux7efcux5408ux6bd4ux8f83}}
+基于国际经验和上述启示，以下是一些关于政府竞争与地方经济发展的实践建议：
 
-不同似然函数对比采用 \(\chi^2\) 检验，以 lognormal 模型为基准进行 LRT
-检验，结果如下表显示。综合似然函数最大值、\(AIC\)、\(SBC\) 与 \(LRT\)
-检验值，GARCH 模型的似然函数、\(AIC\)、\(SBC\) 最大，且相较于 lognormal
-模型效果提升显著。
+\subsection{建立绩效评估机制}
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{54}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{result}\PY{p}{)}\PY{o}{.}\PY{n}{T}
-\end{Verbatim}
-\end{tcolorbox}
+政府应该建立绩效评估机制，以监测政府竞争的效果。这可以帮助政府了解哪些政策和措施有效，哪些需要调整或取消。绩效评估也可以提高政府的透明度和问责制。
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{54}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-          k       log(L)          AIC          SBC
-LN      2.0  1182.436168  1180.436168  1175.934878
-AR(1)   3.0  1183.090866  1180.090866  1173.338932
-ARCH    3.0  1160.477695  1157.477695  1150.725760
-GARCH   4.0  1228.883767  1224.883767  1215.881187
-RSLN-2  6.0  1220.002313  1214.002313  1200.498444
-\end{Verbatim}
-\end{tcolorbox}
+\subsection{促进政府合作和协同}
 
-    \hypertarget{ux7b2cux4e8cux9898}{%
-\section{第二题}\label{ux7b2cux4e8cux9898}}
+政府竞争不一定意味着政府之间的对抗。政府应鼓励地方政府之间的合作和协同，以共同解决跨地区问题。这可以通过建立合作机制、共同制定政策和分享最佳实践来实现。
 
-对比五个模型的SBC和AIC数值，我们认为ARCH模型是最优的。因此，下文选择ARCH模型来估计投资组合的未来走势与市场风险。
+\subsection{最佳实践案例分析}
 
-我们使用VaR和ES来描述模拟分布的市场风险，分别探讨了置信水平为99\%、95\%和90\%三种情况，最终得到使用GARCH模型进行蒙特卡洛模拟时，99\%置信水平下的单周收益率VaR=-22.05\%，对应的ES=-26.16\%；95\%置信水平下的单周收益率VaR=-15.17\%，对应的ES=-19.54\%；90\%置信水平下的单周收益率VaR=-11.80\%，对应的ES=-16.46\%。
+政府应该研究其他地方政府的最佳实践案例，以了解哪些政策和措施在其他地区成功。这可以为政府提供有关如何改进政策和吸引投资的灵感。
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{55}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{42}\PY{p}{)}
-\PY{n}{cases} \PY{o}{=} \PY{l+m+mi}{10000}
-\PY{k}{for} \PY{n}{case} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{cases}\PY{p}{)}\PY{p}{:}
-    \PY{k}{if} \PY{p}{(}\PY{n}{case}\PY{o}{*}\PY{l+m+mi}{10}\PY{p}{)} \PY{o}{\PYZpc{}} \PY{n}{cases} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
-        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{simulating}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{case}\PY{o}{/}\PY{n}{cases}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-    \PY{n}{sim\PYZus{}model} \PY{o}{=} \PY{n}{arch\PYZus{}model}\PY{p}{(}\PY{k+kc}{None}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{q}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-    \PY{n}{simulation} \PY{o}{=} \PY{n}{sim\PYZus{}model}\PY{o}{.}\PY{n}{simulate}\PY{p}{(}\PY{n}{garch}\PY{o}{.}\PY{n}{params}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}
-    \PY{n}{monte\PYZus{}carlo}\PY{p}{[}\PY{n}{case}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{prod}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{simulation}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
+通过实施这些建议，政府可以更好地应对政府竞争的挑战，确保其对地方经济发展产生积极影响。政府竞争可以是推动经济增长的有力工具，但需要谨慎管理，以确保其不会导致不平等和资源分配问题。
+\section{结论}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-simulating 0.0 \%
-simulating 10.0 \%
-simulating 20.0 \%
-simulating 30.0 \%
-simulating 40.0 \%
-simulating 50.0 \%
-simulating 60.0 \%
-simulating 70.0 \%
-simulating 80.0 \%
-simulating 90.0 \%
-    \end{Verbatim}
+通过深入研究国际经验中的政府竞争案例，我们可以得出一些重要的结论，这些结论对政府政策制定者和研究者都具有重要意义。首先，政府竞争可以激发经济增长、创造就业机会和吸引投资。国际案例研究表明，中国的特区政策和美国的州际竞争都为地方经济带来了积极效应。然而，政府竞争也可能导致资源分配不均和财政浪费，因此需要谨慎管理和监督。
 
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{56}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{monte\PYZus{}carlo} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}
-\PY{n}{var} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{monte\PYZus{}carlo}\PY{p}{)}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{)}
-\PY{n}{es} \PY{o}{=} \PY{n}{var}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{monte\PYZus{}carlo}\PY{p}{[}\PY{n}{monte\PYZus{}carlo} \PY{o}{\PYZlt{}} \PY{n}{x}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{es}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{es} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{var}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{var} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}
-\end{Verbatim}
-\end{tcolorbox}
+其次，财政管理和透明度在政府竞争中起着至关重要的作用。政府需要制定财政政策，以确保资源分配公平和高效。透明度和问责制可以防止财政滥用和不当行为。
 
-            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{56}{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-            es       var
-0.01 -0.499970 -0.427457
-0.05 -0.379925 -0.300438
-0.10 -0.323582 -0.241536
-\end{Verbatim}
-\end{tcolorbox}
+此外，政府竞争可能导致不同地区之间的不平等问题，因为一些地方政府可能更能吸引投资和资本，而其他地方则可能被边缘化。政府需要采取政策措施，以减轻这种不平等，并确保资源分配更加均匀。最后，政府竞争需要明确的政策指导原则，以确保政府之间的竞争是有益的。这些指导原则可以包括合作框架的建立、资源分配机制的制定、财政政策的调整等。
 
+未来研究方向方面，我们建议进行更深入的研究，以更好地理解政府竞争的机制和效应。这包括进一步研究政府竞争对不同类型企业和行业的影响，以及政府竞争对创新和科技发展的推动作用。此外，还可以研究政府竞争在不同文化和政治体制下的效果，以了解其适用性和局限性。
 
-    % Add a bibliography block to the postdoc
-
-
-
+总之，政府竞争是当今全球经济中备受关注的议题，它既有潜在好处，也伴随着一些潜在问题。通过深入研究国际案例和总结国际经验中的启示，政府政策制定者和研究者可以更好地理解政府竞争的机制，并制定更有效的政策来促进地方经济发展。
+\nocite{*}
+\printbibliography
 \end{document}
